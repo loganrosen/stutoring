@@ -23,12 +23,21 @@ def teardown_request(exception):
 
 @app.route('/')
 def index():
+
+    error = None
     #handles the index form being submitted
     if request.method == 'POST':
+        #handle logging in through the navbar
+        if request.form['submit'] == 'nav_login':
+            if login(request.form['nav_email'], request.form['nav_password']):
+                #TODO: if it turns out there's no need for this, refactor to if not statement
+                pass
+            else:
+                error = 'Incorrect username or password'
 
         #handle the case where it's someone asking for help
         #TODO: this might not work, test with the prototype
-        if request.form['submit'] == GET_HELP:
+        elif request.form['submit'] == GET_HELP:
             session['state'] = GET_HELP
             session['course'] = request.form['course']
             #TODO: do we want to split locations into an array here?
@@ -51,9 +60,9 @@ def index():
 
         else:
             return redirect(url_for('login_register'))
-    else:
-        #display the html template
-        return render_template('index.html')
+
+    #display the html template
+    return render_template('index.html', logged_in=session['email'], error=error)
 
 @app.route('/user/my_matches')
 def my_matches():
@@ -93,6 +102,7 @@ def register(email, password1, password2):
 
 @app.route('/loginregister', methods=['GET', 'POST'])
 def login_register():
+    error = None
     #handles the register or login form being submitted
     if request.method =='POST':
 
@@ -125,7 +135,7 @@ def login_register():
                 error = 'Invalid email or password'
 
     #else if there's no post information
-    return render_template('loginregister.html', error)
+    return render_template('loginregister.html', logged_in=session['email'], error=error)
 
 
 '''@app.route('/login', methods=['GET', 'POST'])
