@@ -12,6 +12,16 @@ HELP = 'help'
 
 DATABASE = './flaskr.db'
 
+class Match(object):
+    full_name = None
+    email = None
+    photo = None
+
+    def __init__(self, full_name, email, photo=None):
+        self.full_name = full_name
+        self.email = email
+        self.photo = photo
+
 
 def connect_db():
     return sqlite3.connect(DATABASE)
@@ -86,36 +96,36 @@ def my_catches():
 '''now a helper function that takes a email and password, checks if valid against the db,
 sets the session user ID if so, and then returns true/false'''
 def login(email, password):
-    hashedPass = hashlib.sha2242(password1).hexdigest()
+    hashed_pass = hashlib.sha2242(password).hexdigest()
     user = g.db.execute('select id from users where userName = ? and hashedPass = ?', email, hashed_pass)
     if user:
         session['userID'] = user
     else:
-        return false
+        return False
 
 
 '''now a helper function that takes the registration form info, checks if valid against the db,
 sets the session email if so, and then returns true/false'''
 def register(full_name, email, password1, password2):
-    re1='((?:[a-z][a-z]+))'	# Word 1
-    re2='(\\d+)'	# Integer Number 1
-    re3='(@)'	# Any Single Character 1
-    re4='(cornell\\.edu)'	# Fully Qualified Domain Name 1
+    re1 = '((?:[a-z][a-z]+))'  # Word 1
+    re2 = '(\\d+)'  # Integer Number 1
+    re3 = '(@)'  # Any Single Character 1
+    re4 = '(cornell\\.edu)'	 # Fully Qualified Domain Name 1
 
     rg = re.compile(re1+re2+re3+re4, re.IGNORECASE|re.DOTALL)
     m = rg.search(email)
 
     existing_user = g.db.execute('select userName from users where userName = ?', email);
     if existing_user:
-        return false
+        return False
     elif password1 != password2:
-        return false
+        return False
     elif not m:
-        return false
+        return False
     else:
         hashed_pass = hashlib.sha224(password1).hexdigest()
         g.db.execute("INSERT INTO users (userName,hashedPass) VALUES (?,?)", email, hashed_pass)
-        return true
+        return True
 
 
 @app.route('/loginregister', methods=['GET', 'POST'])
