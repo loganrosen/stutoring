@@ -54,7 +54,7 @@ def teardown_request(exception):
     if hasattr(g, 'db'):
         g.db.close()
 
-@app.route('/',  methods=['POST'])
+@app.route('/',  methods=['GET','POST'])
 def index():
     error = None
     full_name = None
