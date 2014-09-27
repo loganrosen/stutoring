@@ -86,7 +86,7 @@ def login(email, password):
 
 '''now a helper function that takes the registration form info, checks if valid against the db,
 sets the session email if so, and then returns true/false'''
-def register(email, password1, password2):
+def register(full_name, email, password1, password2):
     re1='((?:[a-z][a-z]+))'	# Word 1
     re2='(\\d+)'	# Integer Number 1
     re3='(@)'	# Any Single Character 1
