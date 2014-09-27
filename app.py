@@ -1,5 +1,5 @@
 
-from flask import Flask, session, redirect, url_for, escape, request, g, render_template
+from flask import Flask, session, redirect, url_for, escape, request, g, render_template, jsonify
 import sqlite3
 import re
 import hashlib
@@ -133,6 +133,13 @@ def login(email, password):
     else:
         return False
 
+#check if user exists
+@app.route('/_user_exists')
+def json_user_exists():
+    request.args.get('email')
+    existing_user = g.db.execute('select userName from users where userName = ?', email)
+    return jsonify(result=existing_user)
+
 
 '''now a helper function that takes the registration form info, checks if valid against the db,
 sets the session email if so, and then returns true/false'''
@@ -145,7 +152,7 @@ def register(full_name, email, password1, password2):
     rg = re.compile(re1+re2+re3+re4, re.IGNORECASE|re.DOTALL)
     m = rg.search(email)
 
-    existing_user = g.db.execute('select userName from users where userName = ?', email);
+    existing_user = g.db.execute('select userName from users where userName = ?', email)
     if existing_user:
         return False
     elif password1 != password2:
