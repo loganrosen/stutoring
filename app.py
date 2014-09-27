@@ -193,7 +193,7 @@ def login_register():
                 error = 'Invalid email or password'
 
     #else if there's no post information
-    return render_template('loginregister.html', error=error)
+    return render_template('test_loginregister.html', error=error)
 
 
 @app.route('/logout')
