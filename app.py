@@ -62,42 +62,45 @@ def index():
             return redirect(url_for('login_register'))
 
     #display the html template
-    return render_template('index.html', logged_in=session['email'], error=error)
+    return render_template('index.html', logged_in=session['full_name'], error=error)
+
 
 @app.route('/user/my_matches')
 def my_matches():
     # session['course'] is course requested help
-    matches = g.db.execute('select userID from userCourses where courseID = ?',[session['course']]);
+    matches = g.db.execute('select userID from userCourses where courseID = ?', [session['course']]);
+
 
 @app.route('/user/my_catches')
 def my_catches():
-    catches = g.db.execute('select id from requests where courseID = ?',[session['course']]);
+    catches = g.db.execute('select id from requests where courseID = ?', [session['course']]);
+
 
 '''now a helper function that takes a email and password, checks if valid against the db,
 sets the session user ID if so, and then returns true/false'''
 def login(email, password):
     hashedPass = hashlib.sha2242(password1).hexdigest()
-    user = g.db.execute('select id from users where userName = ? and hashedPass = ?',email,hashedPass);
+    user = g.db.execute('select id from users where userName = ? and hashedPass = ?', email, hashed_pass);
     if user:
-      session['userID'] = user
+        session['userID'] = user
     else:
-      return false
+        return false
 
 
 '''now a helper function that takes the registration form info, checks if valid against the db,
 sets the session email if so, and then returns true/false'''
 def register(email, password1, password2):
-    existingUser = g.db.execute('select userName from users where userName = ?',email);
-    if (existingUser):
-      return false
-    else if (password1 != password2):
-      return false
-    else if not re.match(r"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b", email):
-      return false
+    existing_user = g.db.execute('select userName from users where userName = ?', email)
+    if existing_user:
+        return false
+    elif password1 != password2:
+        return false
+    elif not re.match(r"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b", email):
+        return false
     else:
-      hashedPass = hashlib.sha224(password1).hexdigest()
-      g.db.execute("INSERT INTO users (userName,hashedPass) VALUES (?,?)",email,hashedPass);
-      return true
+        hashed_pass = hashlib.sha224(password1).hexdigest()
+        g.db.execute("INSERT INTO users (userName,hashedPass) VALUES (?,?)", email, hashed_pass)
+        return true
 
 
 @app.route('/loginregister', methods=['GET', 'POST'])
@@ -122,8 +125,9 @@ def login_register():
         #elif request.form['submit'] == 'register'"
         else:
             r_email = request.form['r_email']
+            r_full_name = request.form['r_full_name']
 
-            if register(r_email, request.form['r_password1'], request.form['r_password2']):
+            if register(r_full_name, r_email, request.form['r_password1'], request.form['r_password2']):
 
                 #TODO:we should change this later to go to "waiting for confirmation" page
                 if session['state'] == GET_HELP:
@@ -135,7 +139,7 @@ def login_register():
                 error = 'Invalid email or password'
 
     #else if there's no post information
-    return render_template('loginregister.html', logged_in=session['email'], error=error)
+    return render_template('loginregister.html', error=error)
 
 
 '''@app.route('/login', methods=['GET', 'POST'])
