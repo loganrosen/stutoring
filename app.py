@@ -22,6 +22,24 @@ class Match(object):
         self.email = email
         self.photo = photo
 
+class Catch(object):
+    full_name = None
+    email = None
+    photo = None
+    course = None
+    description = None
+    timestamp = None
+
+    def __init__(self, attribute_array):
+        self.full_name = attribute_array[0]
+        self.email = attribute_array[1]
+        # self.photo = photo
+        self.course = attribute_array[2]
+        self.offer = attribute_array[3]
+        self.timestamp = attribute_array[4]
+        self.location = attribute_array[5]
+        # self.description = description
+
 
 def connect_db():
     return sqlite3.connect(DATABASE)
@@ -85,15 +103,25 @@ def index():
 @app.route('/user/my_matches')
 def my_matches():
     # session['course'] is course requested help
+    session['course'] = 2
     matches = g.db.execute('select userID from userCourses where courseID = ?', [session['course']])
     match_obj_array = []
     for id in matches:
         user_attributes = g.db.execute('select fullName, userName from users where id = ?', id)
-        match_obj_array.append(Match(user_attributes[0], user_attributes[1]));
+        user_attributes_fetch = user_attributes.fetchone()
+        match_obj_array.append(Match(user_attributes_fetch[0], user_attributes_fetch[1]))
+    return str(match_obj_array)
 
 @app.route('/user/my_catches')
 def my_catches():
+    session['course'] = 1
     catches = g.db.execute('select id from requests where courseID = ?', [session['course']])
+    catch_obj_array = []
+    for id in catches:
+        request_attributes = g.db.execute('select fullName, userName, code, offer, unixTime, location from requests inner join users on users.id = requests.userID inner join courses on courses.id = requests.courseID')
+        request_attributes_fetch = request_attributes.fetchone()
+        catch_obj_array.append(Catch(request_attributes_fetch))
+    return str(catch_obj_array)
 
 
 '''now a helper function that takes a email and password, checks if valid against the db,
