@@ -54,9 +54,8 @@ def teardown_request(exception):
     if hasattr(g, 'db'):
         g.db.close()
 
-@app.route('/')
+@app.route('/',  methods=['POST'])
 def index():
-
     error = None
     full_name = None
     #handles the index form being submitted
@@ -65,12 +64,10 @@ def index():
         if request.form['submit'] == 'nav_login':
             if login(request.form['nav_email'], request.form['nav_password']):
                 full_name = session['full_name']
-                pass
             else:
                 error = 'Incorrect username or password'
 
         #handle the case where it's someone asking for help
-        #TODO: this might not work, test with the prototype
         elif request.form['submit'] == GET_HELP:
             session['state'] = GET_HELP
             session['course'] = request.form['course']
@@ -168,7 +165,6 @@ def login_register():
     if request.method == 'POST':
 
         #if logging in
-        #TODO: this might not work, test
         if request.form['submit'] == 'login':
             if login(request.form['l_email'], request.form['l_password']):
                 if session['state'] == GET_HELP:
