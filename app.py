@@ -136,9 +136,16 @@ def login(email, password):
 #check if user exists
 @app.route('/_user_exists')
 def json_user_exists():
-    request.args.get('email')
-    existing_user = g.db.execute('select userName from users where userName = ?', email)
+    email = request.args.get('email')
+    existing_user = True if g.db.execute('select userName from users where userName = ?', email) else False
     return jsonify(result=existing_user)
+
+@app.route('/_user_logged_in')
+def json_user_logged_in():
+    return jsonify(result=session['userID'])
+
+@app.route('/_log_in')
+def json_log_in():
 
 
 '''now a helper function that takes the registration form info, checks if valid against the db,
