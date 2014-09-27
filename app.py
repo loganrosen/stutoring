@@ -1,4 +1,4 @@
-from flask import Flask, session, redirect, url_for, escape, request
+from flask import Flask, session, redirect, url_for, escape, request, render_template
 
 app = Flask(__name__)
 
@@ -33,7 +33,7 @@ def index():
             return redirect(url_for('login_or_register'))
     else:
         #display the html template
-        pass
+        return render_template('index.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
