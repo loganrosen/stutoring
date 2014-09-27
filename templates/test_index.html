@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<title>sTudoring</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/style.css') }}">
+	<link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+</head>
+
+<body>
+	{% if logged_in %}
+	<div class="navbar">
+		<div class="sidepadding">
+		<form>
+			<ul>
+				<li> sTudoring </li>
+				<li> <input type="submit" name="submit">logout</input> </li>
+				<li> Logged in as: {{email}}</li>
+			</ul>
+		</form>
+		</div>
+	</div>
+	{% else %}
+	<div class="navbar">
+		<div class="sidepadding">
+		<form>
+			<ul>
+				<li> sTudoring </li>
+				<li> <input type="submit" name="submit" value="nav_login"> </input> </li>
+				<li> password: <input type="password" name="nav_password"> </input> </li>
+				<li> email: <input type="text" name="nav_email"> </input> </li>
+			</ul>
+		</form>
+		</div>
+	</div>
+	{% endif %}
+	<div class="ineed homestripe">
+		<div class="bigform">
+			<form>
+				<p>I need help with <input type="text" name="class" placeholder="XXXX ####">.</p>
+				<p>I am located at <input type="text" name="location" placeholder="location">.</p>
+				<p>I am willing to pay <input type="text" name="howmuch" placeholder="$$$">.</p>
+				<p> <input type="submit" name="submit"> </p>
+			</form>
+		</div>
+	</div>
+	<div class="iwant homestripe">
+		<div class="bigform secondform">
+			<form>
+				<p>I want to tutor for <input type="text" name="class" placeholder="XXXX ####">.</p>
+				<p>I am located at <input type="text" name="location" placeholder="location">.</p>
+				<p>I am willing to get paid <input type="text" name="howmuch" placeholder="$$$">.</p>
+				<p> <input type="submit" name="submit"> </p>
+			</form>
+		</div>
+	</div>
+</body>
+
+</html>
