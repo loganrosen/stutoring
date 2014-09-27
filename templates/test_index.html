@@ -10,7 +10,11 @@
 </head>
 
 <body>
-	{% if logged_in %}
+	{% if error %}
+	<div class="alert-message block-message error">
+	     {{ error }}
+	</div>
+	{% endif %}
 	<div class="navbar">
 		<div class="sidepadding">
 		<form>
