@@ -1,6 +1,6 @@
 
 from flask import Flask, session, redirect, url_for, escape, request, g, render_template
-import sqlite3
+import sqlite3, re, hashlib, binascii
 
 app = Flask(__name__)
 
@@ -57,25 +57,42 @@ def index():
 
 @app.route('/user/my_matches')
 def my_matches():
-    pass
+    # session['course'] is course requested help
+    matches = g.db.execute('select userID from userCourses where courseID = ?',[session['course']]);
 
 @app.route('/user/my_catches')
 def my_catches():
-    pass
+    catches = g.db.execute('select id from requests where courseID = ?',[session['course']]);
 
 '''now a helper function that takes a email and password, checks if valid against the db,
-sets the session email if so, and then returns true/false'''
+sets the session user ID if so, and then returns true/false'''
 def login(email, password):
-    pass
+    hashedPass = hashlib.sha2242(password1).hexdigest()
+    user = g.db.execute('select id from users where userName = ? and hashedPass = ?',email,hashedPass);
+    if user:
+      session['userID'] = user
+    else:
+      return false
+
 
 '''now a helper function that takes the registration form info, checks if valid against the db,
 sets the session email if so, and then returns true/false'''
 def register(email, password1, password2):
-    pass
+    existingUser = g.db.execute('select userName from users where userName = ?',email);
+    if (existingUser):
+      return false
+    else if (password1 != password2):
+      return false
+    else if not re.match(r"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b", email):
+      return false
+    else:
+      hashedPass = hashlib.sha224(password1).hexdigest()
+      g.db.execute("INSERT INTO users (userName,hashedPass) VALUES (?,?)",email,hashedPass);
+      return true
+
 
 @app.route('/loginregister', methods=['GET', 'POST'])
 def login_register():
-
     #handles the register or login form being submitted
     if request.method =='POST':
 
