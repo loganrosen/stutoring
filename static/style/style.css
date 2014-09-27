@@ -6,6 +6,20 @@ body{
 	color: white;
 }
 
+a{
+	color: white;
+	text-decoration: none;
+}
+
+a:hover{
+	text-decoration: underline;
+}
+
+a:visited{
+	color:white;
+	text-decoration: none;
+}
+
 .sidepadding{
 	padding-left: 10%;
 	padding-right: 10%;
@@ -13,12 +27,16 @@ body{
 
 .navbar{
 	color: white;
-	background-color: #3E3232;
+	background-color: #804b4b;
 	position: fixed;
 	width: 100%;
 	padding-top: 1em;
 	padding-bottom: 1em;
 	z-index: 30;
+}
+
+.navbar input[type="submit"]{
+	margin-top: -.2em;
 }
 
 .navbar ul{
@@ -38,7 +56,7 @@ body{
 	padding-left: 0;
 }
 
-input[type="text"] {
+input[type="text"], input[type="password"] {
 	color: white;
     background-color: transparent;
     border: none;
@@ -65,19 +83,32 @@ input[type="text"] {
    font-weight: 100;
 }
 
-input[type="password"] {
-    background-color: transparent;
-    border: none;
-    border-bottom: 1px solid white;
-}
 
 input[type="submit"] {
-    background-color: white;
-    color: #066B9E;
+    background-color: transparent;
+    color: white;
     border: none;
-    border-bottom: 1px solid white;
+    border: 1px solid white;
     font-family: 'Roboto', sans-serif;
-    text-transform: uppercase;
+    font-weight: 100;
+    text-transform: lowercase;
+    font-size: 1em;
+    cursor: pointer; 
+}
+
+input[type="submit"]:hover {
+    background-color: white;
+    color: #804b4b;
+    border: none;
+    border: 1px solid white;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 100;
+    text-transform: lowercase;
+    font-size: 1em;
+}
+
+.bigform input[type="submit"]{
+	float: right;
 }
 
 .verticalcenter{
@@ -92,32 +123,63 @@ input[type="submit"] {
 .homestripe{
 	font-size:3em;
 	width: 100%;
-	position: relative;
+	height: 50vh;
 	text-align: center;
+	-webkit-transition: height 300ms;
+}
+
+.homestripe.active{
+	height: 100vh;
 }
 
 .ineed{
-	background-color: #524656;
+	background-color: #723737;
 }
 
 .iwant{
-	background-color: #CF4647;
+	background-color: #542c2c;
 }
 
 .bigform{
-	padding: 4% 10% 2% 10%;
-	text-align: left;
-}
-
-.secondform{
-	padding-top: 2%;
+	padding-top: 4%;
+	text-align: center;	
 }
 
 .bigform input[type="text"]{
-	color: white;
+	color: #804b4b;
 	border-bottom: 2px solid white;
 	font-size: 1em;
 	font-weight: 100;
 	color: white;
 }
 
+*:focus {
+    outline: none;
+}
+
+.ineedform{
+	padding-top: 5em;
+}
+
+.textwrapper{
+	width: 250px;
+	position: absolute;
+	left: 50%;
+	-webkit-transform: translate3d(-50%, 0, 0);
+	text-align: left;
+	-webkit-transition: width 300ms;
+	overflow: visible;
+}
+
+.textwrapper.active{
+	width: 100%;
+}
+
+#ineedone, #ineedtwo, #ineedthree, #ineedfour{
+	opacity: 0;
+	-webkit-transition: opacity 300ms;
+}
+
+#ineedone.active, #ineedtwo.active, #ineedthree.active, #ineedfour.active{
+	opacity: 1;
+}

@@ -1,0 +1,121 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<title>sTudoring</title>
+	<link rel="stylesheet" type="text/css" href="style/foundation.min.css" />
+	<link rel="stylesheet" type="text/css" href="style/style.css">
+	<link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script> 
+</head>
+
+<body>
+	<div class="navbar"> 
+
+		<div class="row">
+		<div class="columns large-12 small-12">
+		<form>
+			<ul>
+				<li> <a href="index.html">sTudoring </a></li>
+				<li> <input type="submit" name="submit"> </input> </li>
+				<li> password: <input type="password" name="password"> </input> </li>
+				<li> username: <input type="text" name="username"> </input> </li>
+			</ul>
+		</form>
+		</div>
+		</div>
+
+	</div>
+
+	<div class="homestripe ineed"> 
+
+		<div class="row">
+		<div class="columns large-12 small-12">
+
+		<div class="bigform ineedform"> 
+				<form>
+					<div class="textwrapper">
+
+						<span id="ineed"> I need help </span> <span id="ineedone">with <input type="text" name="class" placeholder="XXXX ####">. </span> 
+						<p> <span id="ineedtwo">I am located at <input type="text" name="location" placeholder="location">.</span> </p>
+						<p> <span id="ineedthree"> I am willing to pay <input type="text" name="howmuch" placeholder="$$$">.</span> </p>
+						<p> <span id="ineedfour"> <input type="submit" name="submit"> </span> </p>
+
+
+					</div>
+
+
+					
+					
+				</form>
+			</div>
+
+		</div>
+		</div>
+
+	</div>
+
+	<div class="homestripe iwant"> 
+
+		<div class="row">
+		<div class="columns large-12 small-12">
+
+		<div class="bigform secondform"> 
+			<form>
+				<p> <span id="iwant">I want to tutor </span> <span class="hiddenonload" id="iwantone">for <input type="text" name="class" placeholder="XXXX ####">. </span></p>
+
+				<!-- <span class="hiddenonload" id="iwanttwo"> <p>I am located at <input type="text" name="location" placeholder="location">.</p> </span>
+				<span class="hiddenonload" id="iwantthree"> <p>I am willing to get paid <input type="text" name="howmuch" placeholder="$$$">.</p> </span>
+				<span class="hiddenonload" id="iwantfour"> <p> <input type="submit" name="submit"> </p> </span> -->
+			</form>
+		</div>
+
+		</div>
+		</div>
+
+	</div>
+</body>
+
+
+<script>
+	jQuery(document).ready(function() {
+
+	   	$( "#ineed" ).click(function() {
+	   		$(".ineed").addClass("active");
+	   		$(".textwrapper").addClass("active");
+
+	  	 	$("#ineedone").delay(300).queue(function(next){
+			    $(this).addClass("active");
+			    next();
+			});
+
+			$("#ineedtwo").delay(600).queue(function(next){
+			    $(this).addClass("active");
+			    next(); 
+			});
+
+			$("#ineedthree").delay(900).queue(function(next){
+			    $(this).addClass("active");
+			    next();
+			});
+
+			$("#ineedfour").delay(1200).queue(function(next){
+			    $(this).addClass("active");
+			    next();
+			});
+
+			$("#ineedbutton").delay(1500).queue(function(next){
+			    $(this).addClass("active");
+			    next();
+			});
+		});
+
+		// $( "#iwant" ).click(function() {
+	 //  		$( "#iwantone" ).show( "slow", function() {});
+		// });
+
+	});
+</script>
+
+</html>
