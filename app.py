@@ -54,9 +54,6 @@ def teardown_request(exception):
     if hasattr(g, 'db'):
         g.db.close()
 
-def get_full_name(email):
-    pass
-
 @app.route('/')
 def index():
 
@@ -67,7 +64,7 @@ def index():
         #handle logging in through the navbar
         if request.form['submit'] == 'nav_login':
             if login(request.form['nav_email'], request.form['nav_password']):
-                full_name = get_full_name(request.form['nav_email'])
+                full_name = session['full_name']
                 pass
             else:
                 error = 'Incorrect username or password'
@@ -132,9 +129,10 @@ def my_catches():
 sets the session user ID if so, and then returns true/false'''
 def login(email, password):
     hashed_pass = hashlib.sha2242(password).hexdigest()
-    user = g.db.execute('select id from users where userName = ? and hashedPass = ?', email, hashed_pass)
+    user = g.db.execute('select id, fullName from users where userName = ? and hashedPass = ?', email, hashed_pass)
     if user:
-        session['userID'] = user
+        session['userID'] = user.fetchone()[0]
+        session['full_name'] user.fetchone()[1]
     else:
         return False
 
