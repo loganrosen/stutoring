@@ -4,6 +4,8 @@ import sqlite3
 
 app = Flask(__name__)
 
+GET_HELP = 'get_help'
+HELP = 'help'
 
 DATABASE = './flaskr.db'
 
@@ -19,7 +21,6 @@ def teardown_request(exception):
     if hasattr(g, 'db'):
         g.db.close()
 
-
 @app.route('/')
 def index():
     #handles the index form being submitted
@@ -27,7 +28,8 @@ def index():
 
         #handle the case where it's someone asking for help
         #TODO: this might not work, test with the prototype
-        if request.form['submit'] == 'get_help':
+        if request.form['submit'] == GET_HELP:
+            session['state'] = GET_HELP
             session['course'] = request.form['course']
             #TODO: do we want to split locations into an array here?
             session['locations'] = request.form['locations']
@@ -35,15 +37,17 @@ def index():
             session['offer'] = request.form['offer']
 
         #handle the case where it's someone wanting to help
-        #elif request.form['submit'] == 'help'
+        #elif request.form['submit'] == 'HELP'
         else:
+            session['state'] = HELP
             session['expert_courses'] = request.form['expert_courses']
 
-        if 'username' in session:
-            if request.form['submit'] == 'get_help':
-                return redirect(url_for('my_matches', username=session['username']))
+        #if user is already logged in
+        if 'email' in session:
+            if session['state'] == GET_HELP:
+                return redirect(url_for('my_matches', email=session['email']))
             else:
-                return redirect(url_for('my_catches', username=session['username']))
+                return redirect(url_for('my_catches', email=session['email']))
 
         else:
             return redirect(url_for('login_register'))
@@ -51,44 +55,83 @@ def index():
         #display the html template
         return render_template('index.html')
 
-@app.route('/<username>/my_matches')
-def show_matches(username):
+@app.route('/user/<email>/my_matches')
+def my_matches(email):
     pass
 
-@app.route('/<username>/my_catches')
-def show_catches(username):
-    cur = g.db.execute('select title, text from entries order by id desc')
-    entries = [dict(title=row[0], text=row[1]) for row in cur.fetchall()]
-    return entries
+@app.route('/user/<email>/my_catches')
+def my_catches(email):
+    pass
 
-@app.route('/loginregister')
+'''now a helper function that takes a email and password, checks if valid against the db,
+sets the session email if so, and then returns true/false'''
+def login(email, password):
+    pass
+
+'''now a helper function that takes the registration form info, checks if valid against the db,
+sets the session email if so, and then returns true/false'''
+def register(email, password1, password2):
+    pass
+
+@app.route('/loginregister', methods=['GET', 'POST'])
 def login_register():
-    pass
 
-@app.route('/login', methods=['GET', 'POST'])
+    #handles the register or login form being submitted
+    if request.method =='POST':
+
+        #TODO: this might not work, test
+        if request.form['submit'] == 'login':
+            if login(request.form['l_email'], request.form['l_password']):
+                if session['state'] == GET_HELP:
+                    redirect(url_for(my_matches), email=session['email'])
+                #elif session['state'] == HELP:
+                else:
+                    redirect(url_for(my_catches), email=session['email'])
+            else:
+                error = 'Invalid username/password'
+        #elif request.form['submit'] == 'register'"
+        else:
+            r_email = request.form['r_email']
+
+            if register(r_email, request.form['r_password1'], request.form['r_password2']):
+
+                #TODO:we should change this later to go to "waiting for confirmation" page
+                if session['state'] == GET_HELP:
+                    redirect(url_for(my_matches), email=session['email'])
+                #elif session['state'] == HELP:
+                else:
+                    redirect(url_for(my_catches), email=session['email'])
+            else:
+                error = 'Invalid registration'
+    return render_template('loginregister.html', error)
+
+
+'''@app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         session['username'] = request.form['username']
         return redirect(url_for('index'))
-    return '''
+    return
         <form action="" method="post">
             <p><input type=text name=username>
             <p><input type=submit value=Login/Register>
         </form>
-    '''
+
+'''
 # route thingy (get or post
-def register():
+'''def register():
     if request.method == 'POST':
         session['username'] = request.form['username']
         return redirect(url_for('index'))
-    return '''
+    return
         <form action="" method="post">
         <p><input type=text name=username>
         <p><input type=submit value=Login/Register>
         </form>
-        '''
+
     #registers
     pass
+'''
 
 @app.route('/logout')
 def logout():
