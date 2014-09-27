@@ -132,7 +132,7 @@ def login(email, password):
     user = g.db.execute('select id, fullName from users where userName = ? and hashedPass = ?', email, hashed_pass)
     if user:
         session['userID'] = user.fetchone()[0]
-        session['full_name'] user.fetchone()[1]
+        session['full_name'] = user.fetchone()[1]
     else:
         return False
 
