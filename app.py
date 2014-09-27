@@ -45,9 +45,9 @@ def index():
         #if user is already logged in
         if 'email' in session:
             if session['state'] == GET_HELP:
-                return redirect(url_for('my_matches', email=session['email']))
+                return redirect(url_for('my_matches'))
             else:
-                return redirect(url_for('my_catches', email=session['email']))
+                return redirect(url_for('my_catches'))
 
         else:
             return redirect(url_for('login_register'))
@@ -55,12 +55,12 @@ def index():
         #display the html template
         return render_template('index.html')
 
-@app.route('/user/<email>/my_matches')
-def my_matches(email):
+@app.route('/user/my_matches')
+def my_matches():
     pass
 
-@app.route('/user/<email>/my_catches')
-def my_catches(email):
+@app.route('/user/my_catches')
+def my_catches():
     pass
 
 '''now a helper function that takes a email and password, checks if valid against the db,
@@ -79,16 +79,19 @@ def login_register():
     #handles the register or login form being submitted
     if request.method =='POST':
 
+        #if logging in
         #TODO: this might not work, test
         if request.form['submit'] == 'login':
             if login(request.form['l_email'], request.form['l_password']):
                 if session['state'] == GET_HELP:
-                    redirect(url_for(my_matches), email=session['email'])
+                    redirect(url_for(my_matches))
                 #elif session['state'] == HELP:
                 else:
-                    redirect(url_for(my_catches), email=session['email'])
+                    redirect(url_for(my_catches))
             else:
-                error = 'Invalid username/password'
+                error = 'Invalid email or password'
+
+        #if registering
         #elif request.form['submit'] == 'register'"
         else:
             r_email = request.form['r_email']
@@ -97,12 +100,14 @@ def login_register():
 
                 #TODO:we should change this later to go to "waiting for confirmation" page
                 if session['state'] == GET_HELP:
-                    redirect(url_for(my_matches), email=session['email'])
+                    redirect(url_for(my_matches))
                 #elif session['state'] == HELP:
                 else:
-                    redirect(url_for(my_catches), email=session['email'])
+                    redirect(url_for(my_catches))
             else:
-                error = 'Invalid registration'
+                error = 'Invalid email or password'
+
+    #else if there's no post information
     return render_template('loginregister.html', error)
 
 
