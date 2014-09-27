@@ -86,7 +86,8 @@ def index():
 def my_matches():
     # session['course'] is course requested help
     matches = g.db.execute('select userID from userCourses where courseID = ?', [session['course']])
-
+    for id in matches:
+      user_attributes = g.db.execute('select fullName, userName from users where id = ?', id)
 
 @app.route('/user/my_catches')
 def my_catches():
