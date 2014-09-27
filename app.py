@@ -107,8 +107,8 @@ def my_matches():
         user_attributes = g.db.execute('select fullName, userName from users where id = ?', id)
         user_attributes_fetch = user_attributes.fetchone()
         match_obj_array.append(Match(user_attributes_fetch[0], user_attributes_fetch[1]))
-    return str(match_obj_array)
-
+    #return str(match_obj_array)
+    return render_template('test_matches.html', matches=match_obj_array)
 
 @app.route('/user/my_catches')
 def my_catches():
@@ -119,7 +119,7 @@ def my_catches():
         request_attributes = g.db.execute('select fullName, userName, code, offer, unixTime, location from requests inner join users on users.id = requests.userID inner join courses on courses.id = requests.courseID')
         request_attributes_fetch = request_attributes.fetchone()
         catch_obj_array.append(Catch(request_attributes_fetch))
-    return str(catch_obj_array)
+    return render_template('test_catches.html', catches=catch_obj_array)
 
 
 '''now a helper function that takes a email and password, checks if valid against the db,

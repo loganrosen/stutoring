@@ -18,7 +18,7 @@
 	{% if full_name %}
 	<div class="navbar">
 		<div class="sidepadding">
-		<form>
+		<form method="POST">
 			<ul>
 				<li> sTudoring </li>
 				<li> <input type="submit" name="submit">logout</input> </li>
@@ -30,7 +30,7 @@
 	{% else %}
 	<div class="navbar">
 		<div class="sidepadding">
-		<form>
+		<form method="POST">
 			<ul>
 				<li> sTudoring </li>
 				<li> <input type="submit" name="submit" value="nav_login"> </input> </li>
@@ -53,7 +53,7 @@
 	</div>
 	<div class="iwant homestripe">
 		<div class="bigform secondform">
-			<form>
+			<form method="POST">
 				<p>I want to tutor for <input type="text" name="expert_courses" placeholder="XXXX ####">.</p>
 				<p>I am located at <input type="text" name="location" placeholder="location">.</p>
 				<p>I am willing to get paid <input type="text" name="howmuch" placeholder="$$$">.</p>
