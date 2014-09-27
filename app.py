@@ -41,17 +41,27 @@ def index():
 
         if 'username' in session:
             if request.form['submit'] == 'get_help':
-                #TODO: url name subject to change
                 return redirect(url_for('my_matches', username=session['username']))
             else:
-                #TODO: url name subject to change
-                return redirect(url_for('my_catches'))
+                return redirect(url_for('my_catches', username=session['username']))
 
         else:
-            return redirect(url_for('login_or_register'))
+            return redirect(url_for('login_register'))
     else:
         #display the html template
         return render_template('index.html')
+
+@app.route('/<username>/my_matches')
+def my_matches(username):
+    pass
+
+@app.route('/<username>/my_catches')
+def my_catches(username):
+    pass
+
+@app.route('loginregister')
+def login_register():
+    pass
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
