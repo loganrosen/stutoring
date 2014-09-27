@@ -4,9 +4,20 @@
 	<title>Log In/Register</title>
 </head>
 <body>
-	<h2>Log In</h2>h2>
+	<h2>Log In</h2>
 	<form method="POST">
-		<label for="username">Username </label><input type="text" name="username">
+		<label for="l_email">email: </label><input type="email" name="l_email">
+		<label for="l_password">password: </label><input type="password" name="l_password">
+		<input type="submit" name="submit" value="Submit">
+	</form>
+
+	<h2>Register</h2>
+	<form method="POST">
+		<label for="r_full_name">full name: </label><input type="text" name="r_full_name">
+		<label for="r_email">email: </label><input type="email" name="r_email">
+		<label for="r_password1">password: </label><input type="password" name="r_password1">
+		<label for="r_password2">confirm password: </label><input type="password" name="r_password2">
+		<input type="submit" name="submit" value="Submit">
 	</form>
 </body>
 </html>
