@@ -22,6 +22,7 @@ class Match(object):
         self.email = email
         self.photo = photo
 
+
 def connect_db():
     return sqlite3.connect(DATABASE)
 
@@ -58,8 +59,7 @@ def index():
             session['course'] = request.form['course']
             #TODO: do we want to split locations into an array here?
             session['locations'] = request.form['locations']
-            #TODO: add in description functionality
-            #session['description'] = request.form['description']
+            session['description'] = request.form['description']
             session['offer'] = request.form['offer']
 
         #handle the case where it's someone wanting to help
@@ -79,7 +79,7 @@ def index():
             return redirect(url_for('login_register'))
 
     #display the html template
-    return render_template('test_index.html', logged_in=session['full_name'], error=error)
+    return render_template('index.html', logged_in=session['full_name'], error=error)
 
 
 @app.route('/user/my_matches')
