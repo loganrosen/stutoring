@@ -1,6 +1,9 @@
 
 from flask import Flask, session, redirect, url_for, escape, request, g, render_template
-import sqlite3, re, hashlib, binascii
+import sqlite3
+import re
+import hashlib
+import binascii
 
 app = Flask(__name__)
 
@@ -9,17 +12,21 @@ HELP = 'help'
 
 DATABASE = './flaskr.db'
 
+
 def connect_db():
     return sqlite3.connect(DATABASE)
+
 
 @app.before_request
 def before_request():
     g.db = connect_db()
 
+
 @app.teardown_request
 def teardown_request(exception):
     if hasattr(g, 'db'):
         g.db.close()
+
 
 @app.route('/')
 def index():
@@ -68,19 +75,19 @@ def index():
 @app.route('/user/my_matches')
 def my_matches():
     # session['course'] is course requested help
-    matches = g.db.execute('select userID from userCourses where courseID = ?', [session['course']]);
+    matches = g.db.execute('select userID from userCourses where courseID = ?', [session['course']])
 
 
 @app.route('/user/my_catches')
 def my_catches():
-    catches = g.db.execute('select id from requests where courseID = ?', [session['course']]);
+    catches = g.db.execute('select id from requests where courseID = ?', [session['course']])
 
 
 '''now a helper function that takes a email and password, checks if valid against the db,
 sets the session user ID if so, and then returns true/false'''
 def login(email, password):
     hashedPass = hashlib.sha2242(password1).hexdigest()
-    user = g.db.execute('select id from users where userName = ? and hashedPass = ?', email, hashed_pass);
+    user = g.db.execute('select id from users where userName = ? and hashedPass = ?', email, hashed_pass)
     if user:
         session['userID'] = user
     else:
@@ -115,7 +122,7 @@ def register(full_name, email, password1, password2):
 def login_register():
     error = None
     #handles the register or login form being submitted
-    if request.method =='POST':
+    if request.method == 'POST':
 
         #if logging in
         #TODO: this might not work, test
