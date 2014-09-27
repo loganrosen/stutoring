@@ -4,10 +4,36 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    if 'username' in session:
-        return 'Logged in as %s' % escape(session['username'])
-    return 'You are not logged in'
-    
+    #handles the index form being submitted
+    if request.method == 'POST':
+
+        #handle the case where it's someone asking for help
+        #TODO: this might not work, test with the prototype
+        if request.form['submit'] == 'get_help':
+            session['course'] = request.form['course']
+            #TODO: do we want to split locations into an array here?
+            session['locations'] = request.form['locations']
+            session['description'] = request.form['description']
+            session['offer'] = request.form['offer']
+
+        #handle the case where it's someone wanting to help
+        #elif request.form['submit'] == 'help'
+        else:
+            session['expert_courses'] = request.form['expert_courses']
+
+        if 'username' in session:
+            if request.form['submit'] == 'get_help':
+                #TODO: url name subject to change
+                return redirect(url_for('my_matches', username=session['username']))
+            else:
+                #TODO: url name subject to change
+                return redirect(url_for('my_catches'))
+
+        else:
+            return redirect(url_for('login_or_register'))
+    else:
+        #display the html template
+        pass
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -23,6 +49,7 @@ def login():
 # route thingy (get or post
 def register():
     #registers
+    pass
 
 @app.route('/logout')
 def logout():
