@@ -54,17 +54,20 @@ def teardown_request(exception):
     if hasattr(g, 'db'):
         g.db.close()
 
+def get_full_name(email):
+    pass
 
 @app.route('/')
 def index():
 
     error = None
+    full_name = None
     #handles the index form being submitted
     if request.method == 'POST':
         #handle logging in through the navbar
         if request.form['submit'] == 'nav_login':
             if login(request.form['nav_email'], request.form['nav_password']):
-                #TODO: if it turns out there's no need for this, refactor to if not statement
+                full_name = get_full_name(request.form['nav_email'])
                 pass
             else:
                 error = 'Incorrect username or password'
@@ -87,7 +90,7 @@ def index():
             session['expert_courses'] = request.form['expert_courses']
 
         #if user is already logged in
-        if 'email' in session:
+        if 'userID' in session:
             if session['state'] == GET_HELP:
                 return redirect(url_for('my_matches'))
             else:
@@ -97,7 +100,7 @@ def index():
             return redirect(url_for('login_register'))
 
     #display the html template
-    return render_template('test_index.html', logged_in=session['full_name'], error=error)
+    return render_template('test_index.html', full_name=full_name, error=error)
 
 
 @app.route('/user/my_matches')
@@ -111,6 +114,7 @@ def my_matches():
         user_attributes_fetch = user_attributes.fetchone()
         match_obj_array.append(Match(user_attributes_fetch[0], user_attributes_fetch[1]))
     return str(match_obj_array)
+
 
 @app.route('/user/my_catches')
 def my_catches():
@@ -197,33 +201,6 @@ def login_register():
     #else if there's no post information
     return render_template('loginregister.html', error=error)
 
-
-'''@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        session['username'] = request.form['username']
-        return redirect(url_for('index'))
-    return
-        <form action="" method="post">
-            <p><input type=text name=username>
-            <p><input type=submit value=Login/Register>
-        </form>
-
-'''
-# route thingy (get or post
-'''def register():
-    if request.method == 'POST':
-        session['username'] = request.form['username']
-        return redirect(url_for('index'))
-    return
-        <form action="" method="post">
-        <p><input type=text name=username>
-        <p><input type=submit value=Login/Register>
-        </form>
-
-    #registers
-    pass
-'''
 
 @app.route('/logout')
 def logout():

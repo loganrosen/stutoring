@@ -15,13 +15,14 @@
 	     {{ error }}
 	</div>
 	{% endif %}
+	{% if full_name %}
 	<div class="navbar">
 		<div class="sidepadding">
 		<form>
 			<ul>
 				<li> sTudoring </li>
 				<li> <input type="submit" name="submit">logout</input> </li>
-				<li> Logged in as: {{email}}</li>
+				<li> Logged in as: {{full_name}}</li>
 			</ul>
 		</form>
 		</div>
