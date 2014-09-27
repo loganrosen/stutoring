@@ -146,7 +146,7 @@ def json_user_logged_in():
 
 @app.route('/_log_in')
 def json_log_in():
-
+    pass
 
 '''now a helper function that takes the registration form info, checks if valid against the db,
 sets the session email if so, and then returns true/false'''
