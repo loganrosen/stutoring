@@ -52,14 +52,16 @@ def index():
         return render_template('index.html')
 
 @app.route('/<username>/my_matches')
-def my_matches(username):
+def show_matches(username):
     pass
 
 @app.route('/<username>/my_catches')
-def my_catches(username):
-    pass
+def show_catches(username):
+    cur = g.db.execute('select title, text from entries order by id desc')
+    entries = [dict(title=row[0], text=row[1]) for row in cur.fetchall()]
+    return entries
 
-@app.route('loginregister')
+@app.route('/loginregister')
 def login_register():
     pass
 

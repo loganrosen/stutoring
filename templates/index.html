@@ -4,13 +4,13 @@
 
 <head>
 	<title>sTudoring</title>
-	<link rel="stylesheet" type="text/css" href="style/style.css">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/style.css') }}">
 	<link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 </head>
 
 <body>
-	<div class="navbar"> 
+	<div class="navbar">
 		<div class="sidepadding">
 		<form>
 			<ul>
@@ -22,8 +22,8 @@
 		</form>
 		</div>
 	</div>
-	<div class="ineed homestripe"> 
-		<div class="bigform"> 
+	<div class="ineed homestripe">
+		<div class="bigform">
 			<form>
 				<p>I need help with <input type="text" name="class" placeholder="XXXX ####">.</p>
 				<p>I am located at <input type="text" name="location" placeholder="location">.</p>
@@ -31,8 +31,8 @@
 			</form>
 		</div>
 	</div>
-	<div class="iwant homestripe"> 
-		<div class="bigform secondform"> 
+	<div class="iwant homestripe">
+		<div class="bigform secondform">
 			<form>
 				<p>I need want to tutor for <input type="text" name="class" placeholder="XXXX ####">.</p>
 				<p>I am located at <input type="text" name="location" placeholder="location">.</p>
