@@ -90,12 +90,20 @@ def login(email, password):
 '''now a helper function that takes the registration form info, checks if valid against the db,
 sets the session email if so, and then returns true/false'''
 def register(email, password1, password2):
-    existing_user = g.db.execute('select userName from users where userName = ?', email)
+    re1='((?:[a-z][a-z]+))'	# Word 1
+    re2='(\\d+)'	# Integer Number 1
+    re3='(@)'	# Any Single Character 1
+    re4='(cornell\\.edu)'	# Fully Qualified Domain Name 1
+
+    rg = re.compile(re1+re2+re3+re4, re.IGNORECASE|re.DOTALL)
+    m = rg.search(email)
+
+    existing_user = g.db.execute('select userName from users where userName = ?', email);
     if existing_user:
         return false
     elif password1 != password2:
         return false
-    elif not re.match(r"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b", email):
+    elif not m:
         return false
     else:
         hashed_pass = hashlib.sha224(password1).hexdigest()
