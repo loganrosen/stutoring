@@ -56,3 +56,6 @@ target/
 # virtualenv
 venv/
 
+schema.sql
+
+.idea/
