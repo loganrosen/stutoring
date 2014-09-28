@@ -55,13 +55,6 @@ def teardown_request(exception):
     if hasattr(g, 'db'):
         g.db.close()
 
-def handle_course(course):
-    existing_course = g.db.execute('select id from courses where code = ?', (course,)).fetchone()
-    if not existing_course:
-        g.db.execute("INSERT INTO courses (code) VALUES (?)", [course])
-        g.db.commit()
-    return g.db.execute('select id from courses where code = ?', [course]).fetchone()[0]
-
 @app.route('/',  methods=['GET', 'POST'])
 def index():
     error = None
@@ -69,6 +62,12 @@ def index():
     session['userID'] = 1
     #handles the index form being submitted
     if request.method == 'POST':
+        #handle logging in through the navbar
+        '''if request.form['submit'] == 'nav_login':
+            if login(request.form['nav_email'], request.form['nav_password']):
+                full_name = session['full_name']
+            else:
+                error = 'Incorrect username or password'''
 
         #handle the case where it's someone asking for help
         if 'usernoexistsubmit' in request.form or 'userexistssubmit' in request.form:
@@ -86,10 +85,11 @@ def index():
                 session['userID'] = g.db.execute('select id from users where userName = ?', (user_name,)).fetchone()[0]
 
             course = request.form['course']
+            #TODO: do we want to split locations into an array here?
             location = request.form['location']
             offer = request.form['offer']
             user_id = session['userID']
-            course_id = handle_course(course)
+            course_id = g.db.execute('select id from courses where code = ?', [course]).fetchone()[0]
             unix_time = int(time.time())
             g.db.execute("INSERT INTO requests (userID, courseID, unixTime, location, offer, description) VALUES (?,?,?,?,?,?)",
                          [user_id, course_id, unix_time, location, offer, 'no description yet'])
@@ -112,9 +112,8 @@ def index():
                 session['userID'] = g.db.execute('select id from users where userName = ?', (user_name,)).fetchone()[0]
 
             course = request.form['expert_course']
-            handle_course(course)
             user_id = session['userID']
-            course_id = handle_course(course)
+            course_id = g.db.execute('select id from courses where code = ?', [course]).fetchone()[0]
             app.logger.debug(course_id)
 
             g.db.execute("INSERT INTO userCourses (userID, courseID) VALUES (?,?)", [user_id, int(course_id)])
