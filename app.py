@@ -137,16 +137,29 @@ def login(email, password):
 @app.route('/_user_exists')
 def json_user_exists():
     user_name = str(request.args.get('userName'))
+    app.logger.error(type(user_name))
     existing_user = True if g.db.execute('select userName from users where userName = ?', user_name) else False
     return jsonify(result=existing_user)
 
 @app.route('/_user_logged_in')
 def json_user_logged_in():
-    return jsonify(result=session['userID'])
+    logged_in = True if session['userID'] else False
+    return jsonify(result=logged_in)
 
-@app.route('/_log_in')
+'''@app.route('/_log_in')
 def json_log_in():
-    pass
+    user_name = request.args.get('userName')
+    password = request.args.get('password')
+    if login(request.form['l_email'], request.form['l_password']):
+        if session['state'] == GET_HELP:
+            redirect(url_for(my_matches))
+            #elif session['state'] == HELP:
+        else:
+            redirect(url_for(my_catches))
+        else:
+            pass
+    error = 'Invalid email or password'
+'''
 
 '''now a helper function that takes the registration form info, checks if valid against the db,
 sets the session email if so, and then returns true/false'''
