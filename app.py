@@ -71,6 +71,19 @@ def index():
 
         #handle the case where it's someone asking for help
         if 'usernoexistsubmit' in request.form or 'userexistssubmit' in request.form:
+            if 'usernoexistsubmit' in request.form:
+                user_name = request.form['email']
+                hashed_pass = 'password'
+                full_name = request.form['fullname']
+                #login information
+                g.db.execute("INSERT INTO users (userName, hashedPass, fullName) VALUES (?,?,?)",
+                             [user_name, hashed_pass, full_name])
+                g.db.commit()
+                session['userID'] = g.db.execute('select id from users where userName = ?', (user_name,)).fetchone()[0]
+            else:
+                user_name = request.form['email']
+                session['userID'] = g.db.execute('select id from users where userName = ?', (user_name,)).fetchone()[0]
+
             course = request.form['course']
             #TODO: do we want to split locations into an array here?
             location = request.form['location']
@@ -86,6 +99,18 @@ def index():
         #handle the case where it's someone wanting to help
         #elif request.form['submit'] == 'HELP'
         else:
+            if 'wantusernoexistsubmit' in request.form:
+                user_name = request.form['wantemail']
+                hashed_pass = 'password'
+                full_name = request.form['fullname']
+                g.db.execute("INSERT INTO users (userName, hashedPass, fullName) VALUES (?,?,?)",
+                             [user_name, hashed_pass, full_name])
+                g.db.commit()
+                session['userID'] = g.db.execute('select id from users where userName = ?', (user_name,)).fetchone()[0]
+            else:
+                user_name = request.form['wantemail']
+                session['userID'] = g.db.execute('select id from users where userName = ?', (user_name,)).fetchone()[0]
+
             course = request.form['expert_course']
             user_id = session['userID']
             course_id = g.db.execute('select id from courses where code = ?', [course]).fetchone()[0]
@@ -146,7 +171,9 @@ def get_catches():
     catches = g.db.execute('select requests.id from requests inner join courses on courses.id = requests.courseID where courses.id = ?',[proficient_course[0]]).fetchall()
 
     catch_obj_list = []
-    for id in catches[0]:
+    for catch in catches:
+        id = catch[0]
+        app.logger.debug(str(id))
         request_attributes_fetch = g.db.execute('select fullName, userName, offer, unixTime, location from requests inner join users on users.id = requests.userID where requests.id = ?',[id]).fetchone()
         catch_obj_list.append(Catch(request_attributes_fetch))
     return render_template('test_catches.html', catches=catch_obj_list)
@@ -154,7 +181,6 @@ def get_catches():
 @app.route('/my_matches')
 def get_matches():
     matches = []
-    session['userID'] = 1
 
     # session['course'] = 1
     #if you just added a course
