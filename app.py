@@ -56,10 +56,12 @@ def teardown_request(exception):
     if hasattr(g, 'db'):
         g.db.close()
 
+
 @app.route('/',  methods=['GET', 'POST'])
 def index():
     error = None
     full_name = None
+    session['userID'] = 1
     #handles the index form being submitted
     if request.method == 'POST':
         #handle logging in through the navbar
@@ -70,7 +72,7 @@ def index():
                 error = 'Incorrect username or password'''
 
         #handle the case where it's someone asking for help
-        if request.form['submit'] == GET_HELP:
+        if request.form['usernoexistsubmit']:
             course = request.form['course']
             #TODO: do we want to split locations into an array here?
             location = ', '.request.form['locations']
