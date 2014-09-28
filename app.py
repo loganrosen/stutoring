@@ -72,13 +72,13 @@ def index():
                 error = 'Incorrect username or password'''
 
         #handle the case where it's someone asking for help
-        if request.form['usernoexistsubmit']:
+        if 'usernoexistsubmit' in request.form or 'userexistssubmit' in request.form:
             course = request.form['course']
             #TODO: do we want to split locations into an array here?
-            location = ', '.request.form['locations']
+            location = request.form['location']
             offer = request.form['offer']
             user_id = session['userID']
-            course_id = g.db.execute('select courseID from courses where course = ?', [course]).fetchone()
+            course_id = g.db.execute('select id from courses where code = ?', [course]).fetchone()[0]
             unix_time = int(time.time())
             g.db.execute("INSERT INTO requests (userID, courseID, unixTime, location, offer, description) VALUES (?,?,?,?,?,?)",
                          [user_id, course_id, unix_time, location, offer, 'no description yet'])
