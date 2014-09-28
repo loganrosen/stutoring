@@ -115,28 +115,29 @@ def json_login():
     return jsonify(result=success)
 
 
-@app.route('/_get_catches')
-def json_get_catches():
-    #TODO: this is super broken
-    session['course'] = 1
-    catches = g.db.execute('select id from requests where courseID = ?', [session['course']])
-    catch_obj_array = []
+@app.route('/my_catches')
+def get_catches(courses):
+    catches = []
+    for course in courses:
+        course_id = g.db.execute('select courseID from courses where course = ?', [course]).fetchone()
+        catches.append(g.db.execute('select id from requests where courseID = ?', [course_id]).fetchall())
+    catch_obj_lst = []
     for id in catches:
         request_attributes = g.db.execute('select fullName, userName, code, offer, unixTime, location from requests inner join users on users.id = requests.userID inner join courses on courses.id = requests.courseID')
         request_attributes_fetch = request_attributes.fetchone()
-        catch_obj_array.append(Catch(request_attributes_fetch))
-    return jsonify(result=catch_obj_array)
+        catch_obj_lst.append(Catch(request_attributes_fetch))
+    render_template('test_catches.html', catches=catch_obj_lst)
 
 
-@app.route('/_get_matches')
-def json_get_matches():
-    course = str(request.args.get('course'))
-    matches = g.db.execute('select userID from userCourses where courseID = ?', [2])
+@app.route('/my_matches')
+def get_matches(course):
+    course_id = g.db.execute('select courseID from courses where course = ?', [course]).fetchone()
+    matches = g.db.execute('select userID from userCourses where courseID = ?', [course_id]).fetchall()
     match_obj_lst = []
     for id in matches:
         user_attributes_fetch = g.db.execute('select fullName, userName from users where id = ?', [id]).fetchone()
         match_obj_lst.append(Match(user_attributes_fetch[0], user_attributes_fetch[1]))
-    return jsonify(result=match_obj_lst)
+    render_template('test_matches.html', matches=match_obj_lst)
 
 
 @app.route('/_register')
