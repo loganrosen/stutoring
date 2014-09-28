@@ -135,21 +135,25 @@ def get_catches():
 @app.route('/my_matches')
 def get_matches():
     matches = []
+    session['userID'] = 1
+    requested_course = g.db.execute()
+
+    session['course'] = 1
     #if you just added a course
-    if session['course']:
-        course_id = g.db.execute('select courseID from courses where course = ?', [session['course']]).fetchone()
+    if 'course' in session:
+        course_id = g.db.execute('select id from courses where code = ?', [session['course']]).fetchone()
         matches.append(g.db.execute('select userID from userCourses where courseID = ?', [course_id]).fetchall())
 
     #add all existing courses
-    course_ids = g.db.execute('select courseID from requests where userID = ?', [session['userID']]).fetchall()
+    '''course_ids = g.db.execute('select courseID from requests where userID = ?', [session['userID']]).fetchall()
     for course_id in course_ids:
-        matches.append(g.db.execute('select userID from userCourses where courseID = ?', [course_id]).fetchall())
+        matches.append(g.db.execute('select userID from userCourses where courseID = ?', [course_id]).fetchall())'''
 
     match_obj_lst = []
     for id in matches:
         user_attributes_fetch = g.db.execute('select fullName, userName from users where id = ?', [id]).fetchone()
         match_obj_lst.append(Match(user_attributes_fetch[0], user_attributes_fetch[1]))
-    render_template('test_matches.html', matches=match_obj_lst)
+    return render_template('test_matches.html', matches=match_obj_lst)
 
 
 @app.route('/_register')
