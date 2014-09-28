@@ -183,3 +183,9 @@ input[type="submit"]:hover {
 #ineedone.active, #ineedtwo.active, #ineedthree.active, #ineedfour.active{
 	opacity: 1;
 }
+
+
+#userexists
+{
+	display: none;
+}

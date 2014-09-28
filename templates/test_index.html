@@ -16,9 +16,10 @@
 				$.getJSON($SCRIPT_ROOT + '/_user_exists', {
 					userName: $('#needemail').val()
 				}, function(data) {
+					console.log(data.result)
 					if (data.result == true)
 					{
-						console.log("fuckall");
+						$('#userexists').show();
 					}
 				});
 				return false;
@@ -36,7 +37,7 @@
 	{% if full_name %}
 	<div class="navbar">
 		<div class="sidepadding">
-		<form method="POST" id="logout">
+		<form id="logout">
 			<ul>
 				<li> sTudoring </li>
 				<li> <input type="submit" name="submit">logout</input> </li>
@@ -48,7 +49,7 @@
 	{% else %}
 	<div class="navbar">
 		<div class="sidepadding">
-		<form method="POST" id="login">
+		<form id="login">
 			<ul>
 				<li> sTudoring </li>
 				<li> <input type="submit" name="submit" value="nav_login"> </input> </li>
@@ -61,7 +62,7 @@
 	{% endif %}
 	<div class="ineed homestripe">
 		<div class="bigform">
-			<form method="POST" id="ineedhelp">
+			<form id="ineedhelp">
 				<p>I need help with <input type="text" name="course" placeholder="XXXX ####">.</p>
 				<p>I am located at <input type="text" name="locations" placeholder="location">.</p>
 				<p>I am willing to pay <input type="text" name="offer" placeholder="$$$">.</p>
@@ -69,7 +70,7 @@
 				<p><input type="submit" name="needsubmit1" id="needsubmit1" value="get_help"> </p>
 
 				<!-- shown if account exists -->
-				<p>My password is <input type="password" name="password" placeholder="secretpassword">.</p>
+				<p id="userexists">My password is <input type="password" name="password" placeholder="secretpassword">.</p>
 
 				<!-- shown if account doesn't exist -->
 				<p>I want my password to be <input type="password" name="password1" placeholder="secretpassword">.</p>
@@ -79,7 +80,7 @@
 	</div>
 	<div class="iwant homestripe">
 		<div class="bigform secondform">
-			<form method="POST" id="iwanttohelp">
+			<form id="iwanttohelp">
 				<p>I want to tutor for <input type="text" name="expert_courses" placeholder="XXXX ####">.</p>
 				<p>I am located at <input type="text" name="location" placeholder="location">.</p>
 				<p>I am willing to get paid <input type="text" name="howmuch" placeholder="$$$">.</p>
