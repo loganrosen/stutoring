@@ -56,7 +56,6 @@ def teardown_request(exception):
     if hasattr(g, 'db'):
         g.db.close()
 
-
 @app.route('/',  methods=['GET', 'POST'])
 def index():
     error = None
@@ -90,7 +89,7 @@ def index():
             courses = (', ').split(request.form['expert_courses'])
             user_id = session['userID']
             for course in courses:
-                course_id = g.db.execute('select courseID from courses where course = ?', [course]).fetchone()
+                course_id = g.db.execute('select id from courses where code = ?', [course]).fetchone()[0]
                 g.db.execute("INSERT INTO userCourses (userID, courseID) VALUES (?,?)", [user_id, course_id])
             return redirect(url_for('get_catches'))
 
@@ -122,8 +121,12 @@ def json_login():
     email = request.args.get('userName')
     hashed_pass = hashlib.sha2242(request.args.get('password').hexdigest())
     user = g.db.execute('select id, fullName from users where userName = ? and hashedPass = ?', (email, hashed_pass)).fetchone()
-    success = True if user else False
-    return jsonify(result=success)
+    if user:
+        session['userID'] = user[0]
+        session['fullName'] = user[1]
+        return jsonify(result=True)
+    else:
+        return jsonify(result=False)
 
 
 @app.route('/my_catches')
