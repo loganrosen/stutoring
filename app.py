@@ -4,7 +4,8 @@ import sqlite3
 import re
 import hashlib
 import binascii
-import timestamp
+import datetime
+import time
 
 app = Flask(__name__)
 
@@ -60,41 +61,48 @@ def index():
     error = None
     full_name = None
     #handles the index form being submitted
-    '''if request.method == 'POST':
+    if request.method == 'POST':
         #handle logging in through the navbar
-        if request.form['submit'] == 'nav_login':
+        '''if request.form['submit'] == 'nav_login':
             if login(request.form['nav_email'], request.form['nav_password']):
                 full_name = session['full_name']
             else:
-                error = 'Incorrect username or password'
+                error = 'Incorrect username or password'''
 
         #handle the case where it's someone asking for help
-        elif request.form['submit'] == GET_HELP:
-            session['state'] = GET_HELP
-            session['course'] = request.form['course']
+        if request.form['submit'] == GET_HELP:
+            course = request.form['course']
             #TODO: do we want to split locations into an array here?
-            session['locations'] = request.form['locations']
-            #TODO: add in description functionality
-            #session['description'] = request.form['description']
-            session['offer'] = request.form['offer']
+            location = ', '.request.form['locations']
+            offer = request.form['offer']
+            user_id = session['userID']
+            course_id = g.db.execute('select courseID from courses where course = ?', [course]).fetchone()
+            unix_time = int(time.time())
+            g.db.execute("INSERT INTO requests (userID, courseID, unixTime, location, offer, description) VALUES (?,?,?,?,?,?)",
+                         [user_id, course_id, unix_time, location, offer, 'no description yet'])
+            return redirect(url_for('get_matches'))
 
         #handle the case where it's someone wanting to help
         #elif request.form['submit'] == 'HELP'
         else:
-            session['state'] = HELP
-            session['expert_courses'] = request.form['expert_courses']
+            courses = (', ').split(request.form['expert_courses'])
+            user_id = session['userID']
+            for course in courses:
+                course_id = g.db.execute('select courseID from courses where course = ?', [course]).fetchone()
+                g.db.execute("INSERT INTO userCourses (userID, courseID) VALUES (?,?)", [user_id, course_id])
+            return redirect(url_for('get_catches'))
 
         #if user is already logged in
-        if 'userID' in session:
+        '''if 'userID' in session:
             if session['state'] == GET_HELP:
                 return redirect(url_for('my_matches'))
             else:
                 return redirect(url_for('my_catches'))
 
         else:
-            return redirect(url_for('login_register'))
+            return redirect(url_for('login_register'))'''
 
-    #display the html template'''
+    #display the html template
     return render_template('test_index.html', full_name=full_name, error=error)
 
 
