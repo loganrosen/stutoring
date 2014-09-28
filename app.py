@@ -1,5 +1,5 @@
 
-from flask import Flask, session, redirect, url_for, escape, request, g, render_template
+from flask import Flask, session, redirect, url_for, escape, request, g, render_template, jsonify
 import sqlite3
 import re
 import hashlib
@@ -133,6 +133,33 @@ def login(email, password):
     else:
         return False
 
+#check if user exists
+@app.route('/_user_exists')
+def json_user_exists():
+    user_name = str(request.args.get('userName'))
+    app.logger.error(type(user_name))
+    existing_user = True if g.db.execute('select userName from users where userName = ?', (user_name,)).fetchone() else False
+    return jsonify(result=existing_user)
+
+@app.route('/_user_logged_in')
+def json_user_logged_in():
+    logged_in = True if session['userID'] else False
+    return jsonify(result=logged_in)
+
+'''@app.route('/_log_in')
+def json_log_in():
+    user_name = request.args.get('userName')
+    password = request.args.get('password')
+    if login(request.form['l_email'], request.form['l_password']):
+        if session['state'] == GET_HELP:
+            redirect(url_for(my_matches))
+            #elif session['state'] == HELP:
+        else:
+            redirect(url_for(my_catches))
+        else:
+            pass
+    error = 'Invalid email or password'
+'''
 
 '''now a helper function that takes the registration form info, checks if valid against the db,
 sets the session email if so, and then returns true/false'''
@@ -145,7 +172,7 @@ def register(full_name, email, password1, password2):
     rg = re.compile(re1+re2+re3+re4, re.IGNORECASE|re.DOTALL)
     m = rg.search(email)
 
-    existing_user = g.db.execute('select userName from users where userName = ?', email);
+    existing_user = g.db.execute('select userName from users where userName = ?', email)
     if existing_user:
         return False
     elif password1 != password2:

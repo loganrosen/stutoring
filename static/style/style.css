@@ -197,6 +197,7 @@ input[type="submit"]:hover {
 	opacity: 1;
 }
 
-.fullscreen{
 
+.fullscreen{
+	display: none;
 }
