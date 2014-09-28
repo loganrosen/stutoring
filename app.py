@@ -27,7 +27,7 @@ class Match(object):
 class Catch(object):
     full_name = None
     email = None
-    photo = None
+    offer = None
     course = None
     description = None
     timestamp = None
@@ -36,10 +36,9 @@ class Catch(object):
         self.full_name = attribute_array[0]
         self.email = attribute_array[1]
         # self.photo = photo
-        self.course = attribute_array[2]
-        self.offer = attribute_array[3]
-        self.timestamp = datetime.datetime.fromtimestamp(int(attribute_array[4])).strftime('%Y-%m-%d %H:%M:%S')
-        self.location = attribute_array[5]
+        self.offer = attribute_array[2]
+        self.timestamp = datetime.datetime.fromtimestamp(int(attribute_array[3])).strftime('%Y-%m-%d %H:%M:%S')
+        self.location = attribute_array[4]
         # self.description = description
 
 def connect_db():
@@ -81,6 +80,7 @@ def index():
             unix_time = int(time.time())
             g.db.execute("INSERT INTO requests (userID, courseID, unixTime, location, offer, description) VALUES (?,?,?,?,?,?)",
                          [user_id, course_id, unix_time, location, offer, 'no description yet'])
+            g.db.commit()
             return redirect(url_for('get_matches'))
 
         #handle the case where it's someone wanting to help
@@ -89,8 +89,10 @@ def index():
             course = request.form['expert_course']
             user_id = session['userID']
             course_id = g.db.execute('select id from courses where code = ?', [course]).fetchone()[0]
+            app.logger.debug(course_id)
 
-            g.db.execute("INSERT INTO userCourses (userID, courseID) VALUES (?,?)", [user_id, course_id])
+            g.db.execute("INSERT INTO userCourses (userID, courseID) VALUES (?,?)", [user_id, int(course_id)])
+            g.db.commit()
             return redirect(url_for('get_catches'))
 
         #if user is already logged in
@@ -111,7 +113,6 @@ def index():
 @app.route('/_user_exists')
 def json_user_exists():
     user_name = str(request.args.get('userName'))
-    app.logger.error(type(user_name))
     existing_user = True if g.db.execute('select userName from users where userName = ?', (user_name,)).fetchone() else False
     return jsonify(result=existing_user)
 
@@ -142,9 +143,13 @@ def get_catches():
     #     catches.append(g.db.execute('select id from requests where courseID = ?', [course_id]).fetchall())
     # catch_obj_lst = []
     # for id in catches:
-    catches = g.db.execute('select fullName, userName, code, offer, unixTime, location from requests inner join users on users.id = requests.userID inner join courses on courses.id = requests.courseID where courses.id = ?',[proficient_course[0]]).fetchall()
-    return render_template('test_catches.html', catches=catches)
+    catches = g.db.execute('select requests.id from requests inner join courses on courses.id = requests.courseID where courses.id = ?',[proficient_course[0]]).fetchall()
 
+    catch_obj_list = []
+    for id in catches[0]:
+        request_attributes_fetch = g.db.execute('select fullName, userName, offer, unixTime, location from requests inner join users on users.id = requests.userID where requests.id = ?',[id]).fetchone()
+        catch_obj_list.append(Catch(request_attributes_fetch))
+    return render_template('test_catches.html', catches=catch_obj_list)
 
 @app.route('/my_matches')
 def get_matches():
