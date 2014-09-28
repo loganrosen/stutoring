@@ -70,7 +70,7 @@
 		<div class="columns large-12 small-12">
 		<form id="logout">
 			<ul>
-				<li> <a href="index.html"> sTudoring </a></li>
+				<li> <a href="/"> sTudoring </a></li>
 				<li> <input type="submit" name="submit">logout</input> </li>
 				<li> Logged in as: {{full_name}}</li>
 			</ul>
@@ -80,15 +80,8 @@
 	{% else %}
 	<div class="navbar">
 		<div class="row">
-		<div class="columns large-12 small-12">
-		<form id="login">
-			<ul>
-				<li> <a href="index.html"> sTudoring </a> </li>
-				<li> <input type="submit" name="submit" value="nav_login"> </input> </li>
-				<li> password: <input type="password" name="nav_password"> </input> </li>
-				<li> email: <input type="text" name="nav_email"> </input> </li>
-			</ul>
-		</form>
+		<div class="columns large-12 small-12" id="pagetitle">
+			<a href="/"> sTudoring </a> 
 		</div>
 		</div>
 	</div>
@@ -99,19 +92,19 @@
 		<div class="bigform ineedform textwrapper"> 
 			<form method="POST">
 				<p> <span id="ineed"> I need help </span> <span class="ineedline">with <input type="text" name="course" placeholder="XXXX ####">. </span> </p>
-				<p> <span class="ineedline" id="ineed">I am located at <input type="text" name="location" placeholder="location">.</span> </p>
-				<p> <span class="ineedline"> I am willing to pay <input type="text" name="offer" placeholder="$$$">.</span> </p>
-				<p> <span class="ineedline"> My email is <input type="email" name="email" id="needemail" placeholder="nec45@cornell.edu"> </span> </p>
-				<p> <input type="submit" name="needsubmit1" id="needsubmit1" class="ineedline" value="get_help"> </p>
+				<p> <span class="ineedline">I am located at <input type="text" name="location" placeholder="location">.</span> </p>
+				<p> <span class="ineedline"> I am willing to pay <input type="text" name="offer" placeholder="$">.</span> </p>
+				<p> <span class="ineedline"> My email is <input type="email" name="email" id="needemail" placeholder="br9000@cornell.edu"> </span> </p>
+				<p> <input type="submit" name="needsubmit1" id="needsubmit1" class="ineedline" value="Next"> </p>
 
 				<!-- shown if account exists -->
 				<p class="userexists"> <span class="ineedline2 lightheader"> Welcome back!</span></p>
-				<p class="userexists"> <span class="ineedline2"> password: <input type="text" name="password" placeholder="secretpassword">. </span></p>
+				<p class="userexists"> <span class="ineedline2"> password: <input type="password" name="password" placeholder="secretpassword">. </span></p>
 				<p class="userexists"> <span class="ineedline2"> <input type="submit" name="userexistssubmit" class="userexists ineedline"id="userexistssubmit" value="Submit"> </span> </p>
 
 				<!-- shown if account doesn't exist -->
 				<p class="usernoexist"> <span class="ineedline2 lightheader"> Looks like you're new here... </span></p>
-				<p class="usernoexist"> <span class="ineedline2"> My Name is <input type="name" name="fullname" placeholder="Bob Rob">. </span> </p>
+				<p class="usernoexist"> <span class="ineedline2"> My name is <input type="text	" name="fullname" placeholder="Bob Rob">. </span> </p>
 				<p class="usernoexist"> <span class="ineedline2"> My password will be <input type="password" name="password1" placeholder="secretpassword">.</span></p>
 				
 
@@ -132,8 +125,8 @@
 			<form method="POST">
 				<p> <span id="iwant">I want to tutor </span> <span class="iwantline">for <input type="text" name="expert_course" placeholder="INFO 2300">. </span> </p>
 				<p> <span class="iwantline"> I am located at <input type="text" name="location" placeholder="Olin Library">.</span> </p>
-				<p> <span class="iwantline"> I am willing to get paid <input type="text" name="howmuch" placeholder="$$$">. </span> </p>
-				<p> <span class="iwantline"> My Cornell email is <input type="email" name="wantemail" id="wantemail" placeholder="br9000@cornell.edu">. </span> </p>
+<!-- 				<p> <span class="iwantline"> I am willing to get paid <input type="text" name="howmuch" placeholder="$">. </span> </p>
+ -->				<p> <span class="iwantline"> My Cornell email is <input type="email" name="wantemail" id="wantemail" placeholder="br9000@cornell.edu">. </span> </p>
 				<p> <input type="submit" name="wantsubmit1" id="wantsubmit1" value="Submit" class="iwantline"> </p>
 
 				<!-- shown if account exists -->
@@ -166,8 +159,12 @@
 	jQuery(document).ready(function() {
 
 	   	$( "#ineed" ).click(function() {
-	   		$(".ineed").addClass("active");
 	   		$(".ineedform").addClass("active");
+	   		$(".ineed").addClass("active");
+	   		$("#ineed").addClass("active");
+	   		// $("#ineed").css("top","10px");
+	   		$("#ineed").css("position","static");
+	   		// $("#ineed").css("top","");
 	   		$(".ineedline").each(function(i){
 	   			$(this).delay((i++)*timeDelay).fadeTo(500, 1);
 	   		});
@@ -176,8 +173,10 @@
 		});
 
 		$( "#iwant" ).click(function() {
-	   		$(".iwant").addClass("active");
+			$(".iwant").addClass("active");
 	   		$(".iwantform").addClass("active");
+			$("#iwant").css("position","static");
+
 	   		$(".iwantline").each(function(i){
 	   			$(this).delay((i++)*timeDelay).fadeTo(300, 1);
 	   		});

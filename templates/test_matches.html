@@ -18,7 +18,7 @@
 		<div class="columns large-12 small-12">
 		<form id="logout">
 			<ul>
-				<li> <a href="index.html"> sTudoring </a></li>
+				<li> <a href="/"> sTudoring </a></li>
 				<li> <input type="submit" name="submit">logout</input> </li>
 				<li> Logged in as: {{full_name}}</li>
 			</ul>
@@ -28,15 +28,8 @@
 	{% else %}
 	<div class="navbar">
 		<div class="row">
-		<div class="columns large-12 small-12">
-			<form id="login">
-			<ul>
-				<li> <a href="index.html"> sTudoring </a> </li>
-				<li> <input type="submit" name="submit" value="nav_login"> </input> </li>
-				<li> password: <input type="password" name="nav_password"> </input> </li>
-				<li> email: <input type="text" name="nav_email"> </input> </li>
-			</ul>
-		</form>
+		<div class="columns large-12 small-12" id="pagetitle">
+			<a href="/"> sTudoring </a> 
 		</div>
 		</div>
 	</div>
@@ -45,12 +38,11 @@
 	{% endif %}
 	<div class="homestripe ineed"> 
 		<div class="row results">
-			<p>You have <span class="lighter">{{matches|length}}</span> potential tutors in your area...</p>
+			<br /><p>You have <span class="lighter">{{matches|length}}</span> potential tutors in your area...</p>
 				<ul>
-					{% for catch in catches %}
-					<li>{{ catch.full_name }}
-						<br> <span class="lighter"> {{ catch.email }} </span>
-						<br> <span class="lightened">posted on {{ catch.timestamp }})</span></li>
+					{% for match in matches %}
+					<li>{{ match.full_name }}
+						<br> <span class="lighter"> <a href="{{match.email}}" >{{ match.email }}</a> </span></li>
 					{% endfor %}
 				</ul>
 		</div>

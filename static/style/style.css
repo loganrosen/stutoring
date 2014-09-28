@@ -4,6 +4,7 @@ body{
 	font-family: 'Roboto', sans-serif;
 	font-weight: 100;
 	color: white;
+	line-height: normal;
 }
 
 a{
@@ -56,7 +57,7 @@ a:visited{
 	padding-left: 0;
 }
 
-input[type="text"], input[type="password"], input[type="email"], input[type="password"]{
+input[type="text"], input[type="password"], input[type="email"]{
 	size: 5em;
     background-color: transparent;
     border: none;
@@ -132,6 +133,9 @@ input[type="submit"]:hover {
    	position: absolute;               
    	top: 50%;                         
    	transform: translate(0, -50%);
+   	-o-transform: translate(0, -50%);
+   	-moz-transform: translate(0, -50%);
+   	-webkit-transform: translate(0, -50%);
    	width: 100%;	
 	text-align: center;
 }
@@ -142,6 +146,14 @@ input[type="submit"]:hover {
 	height: 50vh;
 	text-align: center;
 	-webkit-transition: height 300ms;
+	transition: height 300ms;
+	-o-transition: height 300ms;
+	-moz-transition: height 300ms;
+	transition: all 0.3s ease;
+	-webkit-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+
 }
 
 .homestripe.active{
@@ -152,8 +164,18 @@ input[type="submit"]:hover {
 	background-color: #723737;
 }
 
+#ineed{
+	top: 25vh;
+	position: absolute;
+}
+
 .iwant{
 	background-color: #542c2c;
+}
+
+#iwant{
+	top: 20vh;
+	position: absolute;
 }
 
 .bigform{
@@ -161,7 +183,7 @@ input[type="submit"]:hover {
 	text-align: center;	
 }
 
-.bigform input[type="text"]{
+.bigform input[type="text"],input[type="email"],input[type="password"]{
 	color: #804b4b;
 	border-bottom: 2px solid white;
 	font-size: 1em;
@@ -174,15 +196,21 @@ input[type="submit"]:hover {
 }
 
 .ineedform{
-	padding-top: 5em;
+	/*padding-top: 5e*/m;
 }
 
 .textwrapper{
 	width: 250px;
 	position: absolute;
 	left: 50%;
+	transform: translate3d(-50%, 0, 0);
+	-o-transform: translate3d(-50%, 0, 0);
+	-moz-transform: translate3d(-50%, 0, 0);
 	-webkit-transform: translate3d(-50%, 0, 0);
 	text-align: left;
+	transition: width 300ms;
+	-o-transition: width 300ms;
+	-moz-transition: width 300ms;
 	-webkit-transition: width 300ms;
 }
 
@@ -198,6 +226,9 @@ input[type="submit"]:hover {
 	opacity: 0;
 	display: none;
 	-webkit-transition: opacity 400ms;
+	transition: opacity 400ms;
+	-o-transition: opacity 400ms;
+	-moz-transition: opacity 400ms;
 }
 
 .ineedline.active, .iwantline.active{
@@ -215,4 +246,14 @@ input[type="submit"]:hover {
 
 .lightheader{
 	opacity: .1;
+}
+
+li
+{
+	padding-bottom: 1em;
+}
+
+#pagetitle
+{
+	padding: 0;
 }
