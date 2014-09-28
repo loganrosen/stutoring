@@ -117,7 +117,9 @@ def json_login():
 
 
 @app.route('/my_catches')
-def get_catches(courses):
+def get_catches():
+    #TODO: add logic to display pre-existing courses one is an expert in
+    courses = session['courses']
     catches = []
     for course in courses:
         course_id = g.db.execute('select courseID from courses where course = ?', [course]).fetchone()
@@ -131,9 +133,18 @@ def get_catches(courses):
 
 
 @app.route('/my_matches')
-def get_matches(course):
-    course_id = g.db.execute('select courseID from courses where course = ?', [course]).fetchone()
-    matches = g.db.execute('select userID from userCourses where courseID = ?', [course_id]).fetchall()
+def get_matches():
+    matches = []
+    #if you just added a course
+    if session['course']:
+        course_id = g.db.execute('select courseID from courses where course = ?', [session['course']]).fetchone()
+        matches.append(g.db.execute('select userID from userCourses where courseID = ?', [course_id]).fetchall())
+
+    #add all existing courses
+    course_ids = g.db.execute('select courseID from requests where userID = ?', [session['userID']]).fetchall()
+    for course_id in course_ids:
+        matches.append(g.db.execute('select userID from userCourses where courseID = ?', [course_id]).fetchall())
+
     match_obj_lst = []
     for id in matches:
         user_attributes_fetch = g.db.execute('select fullName, userName from users where id = ?', [id]).fetchone()
