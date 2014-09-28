@@ -7,7 +7,6 @@
 	<link rel="stylesheet" type="text/css" href="../static/style/foundation.min.css" />
 	<link rel="stylesheet" type="text/css" href="../static/style/style.css">
 	<link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
-	<link href="http://fonts.googleapis.com/css?family=Reenie+Beanie" rel="stylesheet" type="text/css">
 	<script type=text/javascript>
 	  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
 	</script>
@@ -20,7 +19,7 @@
 					$.getJSON($SCRIPT_ROOT + '/_user_exists', {
 						userName: $('#needemail').val()
 					}, function(data) {
-						$('#needsubmit1').hide();
+						$('#needsubmit1').remove();
 						var pointerState = $("#ineed").css("cursor");
 						if (data.result == true && pointerState == "auto")
 						{
@@ -47,7 +46,7 @@
 						userName: $('#wantemail').val()
 					}, function(data) {
 						// console.log(data.result)
-						$('#wantsubmit1').hide();
+						$('#wantsubmit1').remove();
 						var pointerState = $("#iwant").css("cursor");
 						// console.log(notReadyYet);
 						if (data.result == true && pointerState == "auto")
@@ -181,7 +180,7 @@
 	   			$(this).delay((i++)*timeDelay).fadeTo(500, 1);
 	   		});
 			$(".iwant").hide();
-			$('body').css('background-color', '#723737');
+			$('body').css('background-color', '#411C1C');
 		});
 
 		$( ".iwant" ).click(function() {
@@ -196,7 +195,7 @@
 	   			$(this).delay((i++)*timeDelay).fadeTo(300, 1);
 	   		});
 			$(".ineed").hide();
-			$('body').css('background-color', '#542c2c');
+			$('body').css('background-color', '#4C2020');
 		});
 
 	});
