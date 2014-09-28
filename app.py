@@ -198,9 +198,10 @@ def get_matches():
 
     match_obj_lst = []
     app.logger.debug(str(matches))
-    for id in matches[0]:
+    for id in list(set(matches[0])):
         app.logger.debug(id)
         user_attributes_fetch = g.db.execute('select fullName, userName from users where id = ?', [id[0]]).fetchone()
+
         match_obj_lst.append(Match(user_attributes_fetch[0], user_attributes_fetch[1]))
     return render_template('test_matches.html', matches=match_obj_lst)
 
