@@ -87,11 +87,11 @@ def index():
         #handle the case where it's someone wanting to help
         #elif request.form['submit'] == 'HELP'
         else:
-            courses = (', ').split(request.form['expert_courses'])
+            course = request.form['expert_course']
             user_id = session['userID']
-            for course in courses:
-                course_id = g.db.execute('select courseID from courses where course = ?', [course]).fetchone()
-                g.db.execute("INSERT INTO userCourses (userID, courseID) VALUES (?,?)", [user_id, course_id])
+            course_id = g.db.execute('select id from courses where code = ?', [course]).fetchone()[0]
+
+            g.db.execute("INSERT INTO userCourses (userID, courseID) VALUES (?,?)", [user_id, course_id])
             return redirect(url_for('get_catches'))
 
         #if user is already logged in
@@ -129,17 +129,18 @@ def json_login():
 @app.route('/my_catches')
 def get_catches():
     #TODO: add logic to display pre-existing courses one is an expert in
-    courses = session['courses']
-    catches = []
-    for course in courses:
-        course_id = g.db.execute('select courseID from courses where course = ?', [course]).fetchone()
-        catches.append(g.db.execute('select id from requests where courseID = ?', [course_id]).fetchall())
-    catch_obj_lst = []
-    for id in catches:
-        request_attributes = g.db.execute('select fullName, userName, code, offer, unixTime, location from requests inner join users on users.id = requests.userID inner join courses on courses.id = requests.courseID')
-        request_attributes_fetch = request_attributes.fetchone()
-        catch_obj_lst.append(Catch(request_attributes_fetch))
-    render_template('test_catches.html', catches=catch_obj_lst)
+    proficient_course = g.db.execute('select courseID from userCourses where userID = ?', [session['userID']]).fetchone()
+    app.logger.error(proficient_course)
+
+    #     course_ids = g.db.execute('select userName, fullName from users where user = ?', [session['userID']]).fetchall()
+
+    # for course in courses:
+    #     course_id = g.db.execute('select courseID from courses where course = ?', [course]).fetchone()
+    #     catches.append(g.db.execute('select id from requests where courseID = ?', [course_id]).fetchall())
+    # catch_obj_lst = []
+    # for id in catches:
+    catches = g.db.execute('select fullName, userName, code, offer, unixTime, location from requests inner join users on users.id = requests.userID inner join courses on courses.id = requests.courseID where courses.id = ?',[proficient_course[0]]).fetchall()
+    return render_template('test_catches.html', catches=catches)
 
 
 @app.route('/my_matches')
