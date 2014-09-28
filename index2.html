@@ -33,24 +33,16 @@
 		<div class="row">
 		<div class="columns large-12 small-12">
 
-		<div class="bigform ineedform"> 
+		<div class="bigform ineedform textwrapper"> 
 				<form>
-					<div class="textwrapper">
 
-						<span id="ineed"> I need help </span> <span id="ineedone">with <input type="text" name="class" placeholder="XXXX ####">. </span> 
+						<p> <span id="ineed"> I need help </span> <span id="ineedone">with <input type="text" name="class" placeholder="XXXX ####">. </span> </p>
 						<p> <span id="ineedtwo">I am located at <input type="text" name="location" placeholder="location">.</span> </p>
 						<p> <span id="ineedthree"> I am willing to pay <input type="text" name="howmuch" placeholder="$$$">.</span> </p>
-						<p> <span id="ineedfour"> <input type="submit" name="submit"> </span> </p>
-
-
-					</div>
-
-
-					
-					
+						<p> <input type="submit" name="submit" id="ineedfour"> </p>
 				</form>
-			</div>
-
+		</div>
+		</div>
 		</div>
 		</div>
 
@@ -61,16 +53,16 @@
 		<div class="row">
 		<div class="columns large-12 small-12">
 
-		<div class="bigform secondform"> 
+		<div class="bigform iwantform textwrapper"> 
 			<form>
-				<p> <span id="iwant">I want to tutor </span> <span class="hiddenonload" id="iwantone">for <input type="text" name="class" placeholder="XXXX ####">. </span></p>
-
-				<!-- <span class="hiddenonload" id="iwanttwo"> <p>I am located at <input type="text" name="location" placeholder="location">.</p> </span>
-				<span class="hiddenonload" id="iwantthree"> <p>I am willing to get paid <input type="text" name="howmuch" placeholder="$$$">.</p> </span>
-				<span class="hiddenonload" id="iwantfour"> <p> <input type="submit" name="submit"> </p> </span> -->
+					<p> <span id="iwant">I want to tutor </span> <span id="iwantone">for <input type="text" name="class" placeholder="XXXX ####">. </span> </p>
+					<p> <span id="iwanttwo"> I am located at <input type="text" name="location" placeholder="location">.</span> </p>
+					<p> <span id="iwantthree"> I am willing to get paid <input type="text" name="howmuch" placeholder="$$$">. </span> </p>
+					<p> <input id="iwantfour" type="submit" name="submit"> </p>
+				
 			</form>
 		</div>
-
+		</div>
 		</div>
 		</div>
 
@@ -79,41 +71,69 @@
 
 
 <script>
+
+	var timeDelay = 400;
+
 	jQuery(document).ready(function() {
 
 	   	$( "#ineed" ).click(function() {
 	   		$(".ineed").addClass("active");
-	   		$(".textwrapper").addClass("active");
+	   		$(".ineedform").addClass("active");
 
-	  	 	$("#ineedone").delay(300).queue(function(next){
+	  	 	$("#ineedone").delay(timeDelay).queue(function(next){
 			    $(this).addClass("active");
 			    next();
 			});
 
-			$("#ineedtwo").delay(600).queue(function(next){
+			$("#ineedtwo").delay(timeDelay*2).queue(function(next){
 			    $(this).addClass("active");
 			    next(); 
 			});
 
-			$("#ineedthree").delay(900).queue(function(next){
+			$("#ineedthree").delay(timeDelay*3).queue(function(next){
 			    $(this).addClass("active");
 			    next();
 			});
 
-			$("#ineedfour").delay(1200).queue(function(next){
+			$("#ineedfour").delay(timeDelay*4).queue(function(next){
 			    $(this).addClass("active");
 			    next();
 			});
 
-			$("#ineedbutton").delay(1500).queue(function(next){
+			$("#ineedbutton").delay(timeDelay*5).queue(function(next){
 			    $(this).addClass("active");
 			    next();
 			});
+
+			$(".iwantform").hide();
 		});
 
-		// $( "#iwant" ).click(function() {
-	 //  		$( "#iwantone" ).show( "slow", function() {});
-		// });
+		$( "#iwant" ).click(function() {
+	   		$(".iwant").addClass("active");
+	   		$(".iwantform").addClass("active");
+
+	  	 	$("#iwantone").delay(timeDelay).queue(function(next){
+			    $(this).addClass("active");
+			    next();
+			});
+
+			$("#iwanttwo").delay(timeDelay*2).queue(function(next){
+			    $(this).addClass("active");
+			    next(); 
+			});
+
+			$("#iwantthree").delay(timeDelay*3).queue(function(next){
+			    $(this).addClass("active");
+			    next();
+			});
+
+			$("#iwantfour").delay(timeDelay*4).queue(function(next){
+			    $(this).addClass("active");
+			    next();
+			});
+
+			$(".ineedform").hide();
+		});
 
 	});
 </script>

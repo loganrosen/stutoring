@@ -110,13 +110,6 @@ input[type="submit"]:hover {
 
 .bigform input[type="submit"]{
 	float: right;
-	border: 2px solid white;
-	font-size: .5em;
-	font-weight: 100;
-	padding-top: .5em;
-	padding-bottom: .5em;
-	padding-left: .75em;
-	padding-right: .75em;
 }
 
 .verticalcenter{
@@ -179,24 +172,15 @@ input[type="submit"]:hover {
 	overflow: visible;
 }
 
-.textwrapper.iwantform{
-	width: 300px;
-}
-
 .textwrapper.active{
 	width: 100%;
 }
 
 #ineedone, #ineedtwo, #ineedthree, #ineedfour, #iwantone, #iwanttwo, #iwantthree, #iwantfour{
 	opacity: 0;
-	-webkit-transition: opacity 400ms;
-
+	-webkit-transition: opacity 300ms;
 }
 
 #ineedone.active, #ineedtwo.active, #ineedthree.active, #ineedfour.active, #iwantone.active, #iwanttwo.active, #iwantthree.active, #iwantfour.active{
 	opacity: 1;
-}
-
-.fullscreen{
-
 }

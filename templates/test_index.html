@@ -4,9 +4,10 @@
 
 <head>
 	<title>sTudoring</title>
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/style.css') }}">
+	<link rel="stylesheet" type="text/css" href="../static/style/foundation.min.css" />
+	<link rel="stylesheet" type="text/css" href="../static/style/style.css">
 	<link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script> 
 </head>
 
 <body>
@@ -17,7 +18,7 @@
 	{% endif %}
 	{% if full_name %}
 	<div class="navbar">
-		<div class="sidepadding">
+		<div class="columns large-12 small-12">
 		<form method="POST">
 			<ul>
 				<li> sTudoring </li>
@@ -29,7 +30,8 @@
 	</div>
 	{% else %}
 	<div class="navbar">
-		<div class="sidepadding">
+		<div class="row">
+		<div class="columns large-12 small-12">
 		<form method="POST">
 			<ul>
 				<li> sTudoring </li>
@@ -39,28 +41,110 @@
 			</ul>
 		</form>
 		</div>
+		</div>
 	</div>
 	{% endif %}
-	<div class="ineed homestripe">
-		<div class="bigform">
-			<form method="POST">
-				<p>I need help with <input type="text" name="course" placeholder="XXXX ####">.</p>
-				<p>I am located at <input type="text" name="locations" placeholder="location">.</p>
-				<p>I am willing to pay <input type="text" name="offer" placeholder="$$$">.</p>
-				<p><input type="submit" name="submit" value="get_help"> </p>
+	<div class="homestripe ineed"> 
+		<div class="row">
+		<div class="columns large-12 small-12">
+		<div class="bigform ineedform textwrapper"> 
+			<form>
+				<p> <span id="ineed"> I need help </span> <span id="ineedone">with <input type="text" name="course" placeholder="XXXX ####">. </span> </p>
+				<p> <span id="ineedtwo">I am located at <input type="text" name="locations" placeholder="location">.</span> </p>
+				<p> <span id="ineedthree"> I am willing to pay <input type="text" name="offer" placeholder="$$$">.</span> </p>
+				<p> <input type="submit" name="submit" value="get_help"> </p>
 			</form>
 		</div>
+		</div>
+		</div>
+		</div>
+
 	</div>
-	<div class="iwant homestripe">
-		<div class="bigform secondform">
+	
+	<div class="homestripe iwant"> 
+		<div class="row">
+		<div class="columns large-12 small-12">
+		<div class="bigform iwantform textwrapper"> 
 			<form method="POST">
-				<p>I want to tutor for <input type="text" name="expert_courses" placeholder="XXXX ####">.</p>
-				<p>I am located at <input type="text" name="location" placeholder="location">.</p>
-				<p>I am willing to get paid <input type="text" name="howmuch" placeholder="$$$">.</p>
-				<p><input type="submit" name="submit" value="help"> </p>
+				<p> <span id="iwant">I want to tutor </span> <span id="iwantone">for <input type="text" name="expert_courses" placeholder="XXXX ####">. </span> </p>
+				<p> <span id="iwanttwo"> I am located at <input type="text" name="location" placeholder="location">.</span> </p>
+				<p> <span id="iwantthree"> I am willing to get paid <input type="text" name="howmuch" placeholder="$$$">. </span> </p>
+				<p> <input type="submit" name="submit" value="help"> </p>
 			</form>
 		</div>
+		</div>
+		</div>
+		</div>
+
 	</div>
 </body>
+
+<script>
+
+	var timeDelay = 400;
+
+	jQuery(document).ready(function() {
+
+	   	$( "#ineed" ).click(function() {
+	   		$(".ineed").addClass("active");
+	   		$(".ineedform").addClass("active");
+
+	  	 	$("#ineedone").delay(timeDelay).queue(function(next){
+			    $(this).addClass("active");
+			    next();
+			});
+
+			$("#ineedtwo").delay(timeDelay*2).queue(function(next){
+			    $(this).addClass("active");
+			    next(); 
+			});
+
+			$("#ineedthree").delay(timeDelay*3).queue(function(next){
+			    $(this).addClass("active");
+			    next();
+			});
+
+			$("#ineedfour").delay(timeDelay*4).queue(function(next){
+			    $(this).addClass("active");
+			    next();
+			});
+
+			$("#ineedbutton").delay(timeDelay*5).queue(function(next){
+			    $(this).addClass("active");
+			    next();
+			});
+
+			$(".iwantform").hide();
+		});
+
+		$( "#iwant" ).click(function() {
+	   		$(".iwant").addClass("active");
+	   		$(".iwantform").addClass("active");
+
+	  	 	$("#iwantone").delay(timeDelay).queue(function(next){
+			    $(this).addClass("active");
+			    next();
+			});
+
+			$("#iwanttwo").delay(timeDelay*2).queue(function(next){
+			    $(this).addClass("active");
+			    next(); 
+			});
+
+			$("#iwantthree").delay(timeDelay*3).queue(function(next){
+			    $(this).addClass("active");
+			    next();
+			});
+
+			$("#iwantfour").delay(timeDelay*4).queue(function(next){
+			    $(this).addClass("active");
+			    next();
+			});
+
+			$(".ineedform").hide();
+		});
+
+	});
+</script>
 
 </html>
