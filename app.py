@@ -97,31 +97,6 @@ def index():
     return render_template('test_index.html', full_name=full_name, error=error)
 
 
-@app.route('/user/my_matches')
-def my_matches():
-    # session['course'] is course requested help
-    session['course'] = 2
-    matches = g.db.execute('select userID from userCourses where courseID = ?', [session['course']])
-    match_obj_array = []
-    for id in matches:
-        user_attributes = g.db.execute('select fullName, userName from users where id = ?', id)
-        user_attributes_fetch = user_attributes.fetchone()
-        match_obj_array.append(Match(user_attributes_fetch[0], user_attributes_fetch[1]))
-    #return str(match_obj_array)
-    return render_template('test_matches.html', matches=match_obj_array)
-
-@app.route('/user/my_catches')
-def my_catches():
-    session['course'] = 1
-    catches = g.db.execute('select id from requests where courseID = ?', [session['course']])
-    catch_obj_array = []
-    for id in catches:
-        request_attributes = g.db.execute('select fullName, userName, code, offer, unixTime, location from requests inner join users on users.id = requests.userID inner join courses on courses.id = requests.courseID')
-        request_attributes_fetch = request_attributes.fetchone()
-        catch_obj_array.append(Catch(request_attributes_fetch))
-    return render_template('test_catches.html', catches=catch_obj_array)
-
-
 '''now a helper function that takes a email and password, checks if valid against the db,
 sets the session user ID if so, and then returns true/false'''
 def login(email, password):
@@ -133,6 +108,7 @@ def login(email, password):
     else:
         return False
 
+
 #check if user exists
 @app.route('/_user_exists')
 def json_user_exists():
@@ -141,25 +117,34 @@ def json_user_exists():
     existing_user = True if g.db.execute('select userName from users where userName = ?', (user_name,)).fetchone() else False
     return jsonify(result=existing_user)
 
-@app.route('/_user_logged_in')
-def json_user_logged_in():
-    logged_in = True if session['userID'] else False
-    return jsonify(result=logged_in)
 
-'''@app.route('/_log_in')
+@app.route('/_log_in')
 def json_log_in():
-    user_name = request.args.get('userName')
-    password = request.args.get('password')
-    if login(request.form['l_email'], request.form['l_password']):
-        if session['state'] == GET_HELP:
-            redirect(url_for(my_matches))
-            #elif session['state'] == HELP:
-        else:
-            redirect(url_for(my_catches))
-        else:
-            pass
-    error = 'Invalid email or password'
-'''
+    if login(request.args.get('userName'), request.args.get('password')):
+        return jsonify(result=True)
+    else:
+        return jsonify(result=False)
+
+@app.route('/_get_results')
+def json_get_catches():
+    #TODO: this is super broken
+    session['course'] = 1
+    catches = g.db.execute('select id from requests where courseID = ?', [session['course']])
+    catch_obj_array = []
+    for id in catches:
+        request_attributes = g.db.execute('select fullName, userName, code, offer, unixTime, location from requests inner join users on users.id = requests.userID inner join courses on courses.id = requests.courseID')
+        request_attributes_fetch = request_attributes.fetchone()
+        catch_obj_array.append(Catch(request_attributes_fetch))
+    return jsonify(result=catch_obj_array)
+
+def json_get_matches():
+    course = str(request.args.get('course'))
+    matches = g.db.execute('select userID from userCourses where courseID = ?', [2])
+    match_obj_lst = []
+    for id in matches:
+        user_attributes_fetch = g.db.execute('select fullName, userName from users where id = ?', id).fetchone()
+        match_obj_lst.append(Match(user_attributes_fetch[0], user_attributes_fetch[1]))
+    return jsonify(result=match_obj_lst)
 
 '''now a helper function that takes the registration form info, checks if valid against the db,
 sets the session email if so, and then returns true/false'''
@@ -185,7 +170,7 @@ def register(full_name, email, password1, password2):
         return True
 
 
-@app.route('/loginregister', methods=['GET', 'POST'])
+'''@app.route('/loginregister', methods=['GET', 'POST'])
 def login_register():
     error = None
     #handles the register or login form being submitted
@@ -220,7 +205,7 @@ def login_register():
                 error = 'Invalid email or password'
 
     #else if there's no post information
-    return render_template('test_loginregister.html', error=error)
+    return render_template('test_loginregister.html', error=error)'''
 
 
 @app.route('/logout')
