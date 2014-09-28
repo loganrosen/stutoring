@@ -54,7 +54,7 @@ def teardown_request(exception):
     if hasattr(g, 'db'):
         g.db.close()
 
-@app.route('/',  methods=['GET','POST'])
+@app.route('/',  methods=['GET', 'POST'])
 def index():
     error = None
     full_name = None
@@ -97,18 +97,6 @@ def index():
     return render_template('test_index.html', full_name=full_name, error=error)
 
 
-'''now a helper function that takes a email and password, checks if valid against the db,
-sets the session user ID if so, and then returns true/false'''
-def login(email, password):
-    hashed_pass = hashlib.sha2242(password).hexdigest()
-    user = g.db.execute('select id, fullName from users where userName = ? and hashedPass = ?', email, hashed_pass)
-    if user:
-        session['userID'] = user.fetchone()[0]
-        session['full_name'] = user.fetchone()[1]
-    else:
-        return False
-
-
 #check if user exists
 @app.route('/_user_exists')
 def json_user_exists():
@@ -118,14 +106,16 @@ def json_user_exists():
     return jsonify(result=existing_user)
 
 
-@app.route('/_log_in')
-def json_log_in():
-    if login(request.args.get('userName'), request.args.get('password')):
-        return jsonify(result=True)
-    else:
-        return jsonify(result=False)
+@app.route('/_login')
+def json_login():
+    email = request.args.get('userName')
+    hashed_pass = hashlib.sha2242(request.args.get('password').hexdigest())
+    user = g.db.execute('select id, fullName from users where userName = ? and hashedPass = ?', (email, hashed_pass)).fetchone()
+    success = True if user else False
+    return jsonify(result=success)
 
-@app.route('/_get_results')
+
+@app.route('/_get_catches')
 def json_get_catches():
     #TODO: this is super broken
     session['course'] = 1
@@ -137,18 +127,24 @@ def json_get_catches():
         catch_obj_array.append(Catch(request_attributes_fetch))
     return jsonify(result=catch_obj_array)
 
+
+@app.route('/_get_matches')
 def json_get_matches():
     course = str(request.args.get('course'))
     matches = g.db.execute('select userID from userCourses where courseID = ?', [2])
     match_obj_lst = []
     for id in matches:
-        user_attributes_fetch = g.db.execute('select fullName, userName from users where id = ?', id).fetchone()
+        user_attributes_fetch = g.db.execute('select fullName, userName from users where id = ?', [id]).fetchone()
         match_obj_lst.append(Match(user_attributes_fetch[0], user_attributes_fetch[1]))
     return jsonify(result=match_obj_lst)
 
-'''now a helper function that takes the registration form info, checks if valid against the db,
-sets the session email if so, and then returns true/false'''
-def register(full_name, email, password1, password2):
+
+@app.route('/_register')
+def json_register():
+    full_name = request.args.get('fullName')
+    email = request.args.get('email')
+    password1 = request.args.get('password1')
+    password2 = request.args.get('password2')
     re1 = '((?:[a-z][a-z]+))'  # Word 1
     re2 = '(\\d+)'  # Integer Number 1
     re3 = '(@)'  # Any Single Character 1
@@ -156,18 +152,17 @@ def register(full_name, email, password1, password2):
 
     rg = re.compile(re1+re2+re3+re4, re.IGNORECASE|re.DOTALL)
     m = rg.search(email)
-
-    existing_user = g.db.execute('select userName from users where userName = ?', email)
+    existing_user = g.db.execute('select userName from users where userName = ?', [email]).fetchone()
     if existing_user:
-        return False
+        return jsonify(result=False, reason='Another user exists with the email')
     elif password1 != password2:
-        return False
+        return jsonify(result=False, reason='Password entries do not match')
     elif not m:
-        return False
+        return jsonify(result=False, reason='Invalid email')
     else:
         hashed_pass = hashlib.sha224(password1).hexdigest()
-        g.db.execute("INSERT INTO users (userName,hashedPass) VALUES (?,?)", email, hashed_pass)
-        return True
+        g.db.execute("INSERT INTO users (userName,hashedPass) VALUES (?,?)", [email, hashed_pass])
+        return jsonify(result=True)
 
 
 '''@app.route('/loginregister', methods=['GET', 'POST'])
