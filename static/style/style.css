@@ -202,10 +202,6 @@ input[type="submit"]:hover {
 	display: none;
 }
 
-.userexists{
-	display: none;
-}
-
-.usernoexist{
+.userexists,.usernoexist,.wantuserexists,.wantusernoexist{
 	display: none;
 }

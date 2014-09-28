@@ -28,6 +28,22 @@
 				});
 				return false;
 			});
+
+			$('#wantsubmit1').click(function() {
+				$.getJSON($SCRIPT_ROOT + '/_user_exists', {
+					userName: $('#wantemail').val()
+				}, function(data) {
+					console.log(data.result)
+					$('#wantsubmit1').hide();
+					if (data.result == true)
+					{
+						$('.wantuserexists').show();
+					} else {
+						$('.wantusernoexist').show();
+					}
+				});
+				return false;
+			});
 		});
 	</script>
 </head>
@@ -105,14 +121,20 @@
 				<p> <span id="iwant">I want to tutor </span> <span id="iwantone">for <input type="text" name="expert_courses" placeholder="XXXX ####">. </span> </p>
 				<p> <span id="iwanttwo"> I am located at <input type="text" name="location" placeholder="location">.</span> </p>
 				<p> <span id="iwantthree"> I am willing to get paid <input type="text" name="howmuch" placeholder="$$$">. </span> </p>
-				<p>My Cornell email is <input type="email" name="email" placeholder="nec45@cornell.edu">
-				<p> <input type="submit" name="wantsubmit1" value="help"> </p>
+				<p>My Cornell email is <input type="email" name="wantemail" id="wantemail" placeholder="nec45@cornell.edu">
+				<p> <input type="submit" name="wantsubmit1" id="wantsubmit1" value="Submit"> </p>
 				<!-- shown if account exists -->
-				<p>My password is <input type="password" name="password" placeholder="secretpassword">.</p>
+				<p class="wantuserexists">My password is <input type="password" name="password" placeholder="secretpassword">.</p>
+				<p class="wantuserexists"><input type="submit" name="wantuserexistssubmit" class="wantuserexists" id="wantuserexistssubmit" value="Submit"></p>
 
 				<!-- shown if account doesn't exist -->
-				<p>I want my password to be <input type="password" name="password1" placeholder="secretpassword">.</p>
-				<p>Again, I want my password to be <input type="password" name="password2" placeholder="secretpassword">.</p>
+				<p class="wantusernoexist">I want my password to be <input type="password" name="password1" placeholder="secretpassword">.</p>
+				<p class="wantusernoexist">Again, I want my password to be <input type="password" name="password2" placeholder="secretpassword">.</p>
+				<p class="wantusernoexist">My name is <input type="name" name="fullname" placeholder="Nicole Calance">.</p>
+
+				<p class="wantusernoexist"><input type="submit" name="wantusernoexistsubmit" id="wantusernoexistsubmit" class="wantusernoexist" value="Submit"></p>
+
+
 			</form>
 		</div>
 		</div>
