@@ -4,6 +4,8 @@ import sqlite3
 import re
 import hashlib
 import binascii
+import datetime
+import time
 
 app = Flask(__name__)
 
@@ -36,7 +38,7 @@ class Catch(object):
         # self.photo = photo
         self.course = attribute_array[2]
         self.offer = attribute_array[3]
-        self.timestamp = attribute_array[4]
+        self.timestamp = datetime.datetime.fromtimestamp(int(attribute_array[4])).strftime('%Y-%m-%d %H:%M:%S')
         self.location = attribute_array[5]
         # self.description = description
 
@@ -54,59 +56,55 @@ def teardown_request(exception):
     if hasattr(g, 'db'):
         g.db.close()
 
-@app.route('/',  methods=['GET','POST'])
+@app.route('/',  methods=['GET', 'POST'])
 def index():
     error = None
     full_name = None
+    session['userID'] = 1
     #handles the index form being submitted
     if request.method == 'POST':
         #handle logging in through the navbar
-        if request.form['submit'] == 'nav_login':
+        '''if request.form['submit'] == 'nav_login':
             if login(request.form['nav_email'], request.form['nav_password']):
                 full_name = session['full_name']
             else:
-                error = 'Incorrect username or password'
+                error = 'Incorrect username or password'''
 
         #handle the case where it's someone asking for help
-        elif request.form['submit'] == GET_HELP:
-            session['state'] = GET_HELP
-            session['course'] = request.form['course']
+        if 'usernoexistsubmit' in request.form or 'userexistssubmit' in request.form:
+            course = request.form['course']
             #TODO: do we want to split locations into an array here?
-            session['locations'] = request.form['locations']
-            #TODO: add in description functionality
-            #session['description'] = request.form['description']
-            session['offer'] = request.form['offer']
+            location = request.form['location']
+            offer = request.form['offer']
+            user_id = session['userID']
+            course_id = g.db.execute('select id from courses where code = ?', [course]).fetchone()[0]
+            unix_time = int(time.time())
+            g.db.execute("INSERT INTO requests (userID, courseID, unixTime, location, offer, description) VALUES (?,?,?,?,?,?)",
+                         [user_id, course_id, unix_time, location, offer, 'no description yet'])
+            return redirect(url_for('get_matches'))
 
         #handle the case where it's someone wanting to help
         #elif request.form['submit'] == 'HELP'
         else:
-            session['state'] = HELP
-            session['expert_courses'] = request.form['expert_courses']
+            course = request.form['expert_course']
+            user_id = session['userID']
+            course_id = g.db.execute('select id from courses where code = ?', [course]).fetchone()[0]
+
+            g.db.execute("INSERT INTO userCourses (userID, courseID) VALUES (?,?)", [user_id, course_id])
+            return redirect(url_for('get_catches'))
 
         #if user is already logged in
-        if 'userID' in session:
+        '''if 'userID' in session:
             if session['state'] == GET_HELP:
                 return redirect(url_for('my_matches'))
             else:
                 return redirect(url_for('my_catches'))
 
         else:
-            return redirect(url_for('login_register'))
+            return redirect(url_for('login_register'))'''
 
     #display the html template
     return render_template('test_index.html', full_name=full_name, error=error)
-
-
-'''now a helper function that takes a email and password, checks if valid against the db,
-sets the session user ID if so, and then returns true/false'''
-def login(email, password):
-    hashed_pass = hashlib.sha2242(password).hexdigest()
-    user = g.db.execute('select id, fullName from users where userName = ? and hashedPass = ?', email, hashed_pass)
-    if user:
-        session['userID'] = user.fetchone()[0]
-        session['full_name'] = user.fetchone()[1]
-    else:
-        return False
 
 
 #check if user exists
@@ -118,37 +116,69 @@ def json_user_exists():
     return jsonify(result=existing_user)
 
 
-@app.route('/_log_in')
-def json_log_in():
-    if login(request.args.get('userName'), request.args.get('password')):
+@app.route('/_login')
+def json_login():
+    email = request.args.get('userName')
+    hashed_pass = hashlib.sha2242(request.args.get('password').hexdigest())
+    user = g.db.execute('select id, fullName from users where userName = ? and hashedPass = ?', (email, hashed_pass)).fetchone()
+    if user:
+        session['userID'] = user[0]
+        session['fullName'] = user[1]
         return jsonify(result=True)
     else:
         return jsonify(result=False)
 
-@app.route('/_get_results')
-def json_get_catches():
-    #TODO: this is super broken
-    session['course'] = 1
-    catches = g.db.execute('select id from requests where courseID = ?', [session['course']])
-    catch_obj_array = []
-    for id in catches:
-        request_attributes = g.db.execute('select fullName, userName, code, offer, unixTime, location from requests inner join users on users.id = requests.userID inner join courses on courses.id = requests.courseID')
-        request_attributes_fetch = request_attributes.fetchone()
-        catch_obj_array.append(Catch(request_attributes_fetch))
-    return jsonify(result=catch_obj_array)
 
-def json_get_matches():
-    course = str(request.args.get('course'))
-    matches = g.db.execute('select userID from userCourses where courseID = ?', [2])
+@app.route('/my_catches')
+def get_catches():
+    #TODO: add logic to display pre-existing courses one is an expert in
+    proficient_course = g.db.execute('select courseID from userCourses where userID = ?', [session['userID']]).fetchone()
+    app.logger.error(proficient_course)
+
+    #     course_ids = g.db.execute('select userName, fullName from users where user = ?', [session['userID']]).fetchall()
+
+    # for course in courses:
+    #     course_id = g.db.execute('select courseID from courses where course = ?', [course]).fetchone()
+    #     catches.append(g.db.execute('select id from requests where courseID = ?', [course_id]).fetchall())
+    # catch_obj_lst = []
+    # for id in catches:
+    catches = g.db.execute('select fullName, userName, code, offer, unixTime, location from requests inner join users on users.id = requests.userID inner join courses on courses.id = requests.courseID where courses.id = ?',[proficient_course[0]]).fetchall()
+    return render_template('test_catches.html', catches=catches)
+
+
+@app.route('/my_matches')
+def get_matches():
+    matches = []
+    session['userID'] = 1
+
+    # session['course'] = 1
+    #if you just added a course
+    # if 'course' in session:
+    #     course_id = g.db.execute('select id from courses where code = ?', [session['course']]).fetchone()
+    #     matches.append(g.db.execute('select userID from userCourses where courseID = ?', [course_id]).fetchall())
+
+    #add all existing courses
+    course_ids = g.db.execute('select courseID from requests where userID = ?', [session['userID']]).fetchall()
+    # app.logger.debug(course_ids)
+    for course_id in course_ids:
+        app.logger.debug(course_id[0])
+        matches.append(g.db.execute('select userID from userCourses where courseID = ?', [course_id[0]]).fetchall())
+
     match_obj_lst = []
-    for id in matches:
-        user_attributes_fetch = g.db.execute('select fullName, userName from users where id = ?', id).fetchone()
+    app.logger.debug(str(matches))
+    for id in matches[0]:
+        app.logger.debug(id)
+        user_attributes_fetch = g.db.execute('select fullName, userName from users where id = ?', [id[0]]).fetchone()
         match_obj_lst.append(Match(user_attributes_fetch[0], user_attributes_fetch[1]))
-    return jsonify(result=match_obj_lst)
+    return render_template('test_matches.html', matches=match_obj_lst)
 
-'''now a helper function that takes the registration form info, checks if valid against the db,
-sets the session email if so, and then returns true/false'''
-def register(full_name, email, password1, password2):
+
+@app.route('/_register')
+def json_register():
+    full_name = request.args.get('fullName')
+    email = request.args.get('email')
+    password1 = request.args.get('password1')
+    password2 = request.args.get('password2')
     re1 = '((?:[a-z][a-z]+))'  # Word 1
     re2 = '(\\d+)'  # Integer Number 1
     re3 = '(@)'  # Any Single Character 1
@@ -156,18 +186,22 @@ def register(full_name, email, password1, password2):
 
     rg = re.compile(re1+re2+re3+re4, re.IGNORECASE|re.DOTALL)
     m = rg.search(email)
-
-    existing_user = g.db.execute('select userName from users where userName = ?', email)
+    existing_user = g.db.execute('select userName from users where userName = ?', [email]).fetchone()
     if existing_user:
-        return False
+        return jsonify(result=False, reason='Another user exists with the email')
     elif password1 != password2:
-        return False
+        return jsonify(result=False, reason='Password entries do not match')
     elif not m:
-        return False
+        return jsonify(result=False, reason='Invalid email')
     else:
         hashed_pass = hashlib.sha224(password1).hexdigest()
-        g.db.execute("INSERT INTO users (userName,hashedPass) VALUES (?,?)", email, hashed_pass)
-        return True
+        g.db.execute("INSERT INTO users (userName,hashedPass) VALUES (?,?)", [email, hashed_pass])
+        return jsonify(result=True)
+
+@app.route('/_logout')
+def json_logout():
+    # remove the username from the session if it's there
+    return jsonify(result=True)
 
 
 '''@app.route('/loginregister', methods=['GET', 'POST'])
@@ -207,12 +241,6 @@ def login_register():
     #else if there's no post information
     return render_template('test_loginregister.html', error=error)'''
 
-
-@app.route('/logout')
-def logout():
-    # remove the username from the session if it's there
-    session.pop('username', None)
-    return redirect(url_for('index'))
 
 # set the secret key.  keep this really secret:
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'

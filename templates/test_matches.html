@@ -4,5 +4,9 @@
 	<title>Matches</title>
 </head>
 <body>
+	<h2>You have <b>{{matches|length}}</b> matches in your area! Contact these hot singles for some fun.</h2>
+	{% for match in matches %}
+		<li>{{ match.full_name }} {{ match.email }}</li>
+	{% endfor %}
 </body>
 </html>

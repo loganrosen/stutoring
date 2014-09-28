@@ -29,7 +29,7 @@ create table userCourses (
   courseID integer not null
 );
 
-INSERT INTO users (userName,hashedPass,fullName) VALUES ("lbr58@cornell.edu","securepass","Logan Rosen");
+INSERT INTO users (userName,hashedPass,fullName) VALUES ("lbr58@cornell.edu","593e94fdbeaa0b566ed788aa4138301bb2cea3db65dda93fe6f77cb5","Logan Rosen");
 INSERT INTO users (userName,hashedPass,fullName) VALUES ("jz479@cornell.edu","notsecurepass","Jeff Zhou");
 INSERT INTO users (userName,hashedPass,fullName) VALUES ("nec45@cornell.edu","sucks","Nicole Calace");
 
@@ -42,7 +42,8 @@ INSERT INTO requests (userID,courseID,unixTime,location,offer,description) VALUE
 INSERT INTO requests (userID,courseID,unixTime,location,offer,description) VALUES (2,1,1410838730,"North Campus","£250","help meeeeee!");
 INSERT INTO requests (userID,courseID,unixTime,location,offer,description) VALUES (3,3,1401388330,"Central Campus","326¥","I suck");
 
-INSERT INTO userCourses (userID,courseID) VALUES (1,1);
+INSERT INTO userCourses (userID,courseID) VALUES (2,1);
+INSERT INTO userCourses (userID,courseID) VALUES (3,1);
 INSERT INTO userCourses (userID,courseID) VALUES (1,2);
 INSERT INTO userCourses (userID,courseID) VALUES (3,3);
 INSERT INTO userCourses (userID,courseID) VALUES (4,4);
