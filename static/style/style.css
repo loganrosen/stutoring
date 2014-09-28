@@ -201,3 +201,11 @@ input[type="submit"]:hover {
 .fullscreen{
 	display: none;
 }
+
+.userexists{
+	display: none;
+}
+
+.usernoexist{
+	display: none;
+}

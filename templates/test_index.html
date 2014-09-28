@@ -18,9 +18,12 @@
 					userName: $('#needemail').val()
 				}, function(data) {
 					console.log(data.result)
+					$('#needsubmit1').hide();
 					if (data.result == true)
 					{
-						$('#userexists').show();
+						$('.userexists').show();
+					} else {
+						$('.usernoexist').show();
 					}
 				});
 				return false;
@@ -72,19 +75,19 @@
 				<p> <span id="ineedtwo">I am located at <input type="text" name="locations" placeholder="location">.</span> </p>
 				<p> <span id="ineedthree"> I am willing to pay <input type="text" name="offer" placeholder="$$$">.</span> </p>
 				<p> My Cornell email is <input type="email" name="email" id="needemail" placeholder="nec45@cornell.edu"> </p>
-				<p> <input type="submit" name="submit" value="get_help"> </p>
+				<p> <input type="submit" name="needsubmit1" id="needsubmit1" value="get_help"> </p>
 
 				<!-- shown if account exists -->
-				<p id="userexists">My password is <input type="password" name="password" placeholder="secretpassword">.</p>
+				<p class="userexists">My password is <input type="password" name="password" placeholder="secretpassword">.</p>
 
-				<p class="userexists"><input type="submit" name="userexistssubmit" id="userexistssubmit" value="Submit"></p>
+				<p class="userexists"><input type="submit" name="userexistssubmit" class="userexists" id="userexistssubmit" value="Submit"></p>
 
 				<!-- shown if account doesn't exist -->
 				<p class="usernoexist">I want my password to be <input type="password" name="password1" placeholder="secretpassword">.</p>
 				<p class="usernoexist">Again, I want my password to be <input type="password" name="password2" placeholder="secretpassword">.</p>
 				<p class="usernoexist">My name is <input type="name" name="fullname" placeholder="Nicole Calace">.</p>
 
-				<p class="usernoexist"><input type="submit" name="usernoexistsubmit" id="usernoexistsubmit" value="Submit"></p>
+				<p class="usernoexist"><input type="submit" name="usernoexistsubmit" id="usernoexistsubmit" class="usernoexist" value="Submit"></p>
 
 			</form>
 		</div>
