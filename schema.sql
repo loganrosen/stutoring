@@ -42,7 +42,8 @@ INSERT INTO requests (userID,courseID,unixTime,location,offer,description) VALUE
 INSERT INTO requests (userID,courseID,unixTime,location,offer,description) VALUES (2,1,1410838730,"North Campus","£250","help meeeeee!");
 INSERT INTO requests (userID,courseID,unixTime,location,offer,description) VALUES (3,3,1401388330,"Central Campus","326¥","I suck");
 
-INSERT INTO userCourses (userID,courseID) VALUES (1,1);
+INSERT INTO userCourses (userID,courseID) VALUES (2,1);
+INSERT INTO userCourses (userID,courseID) VALUES (3,1);
 INSERT INTO userCourses (userID,courseID) VALUES (1,2);
 INSERT INTO userCourses (userID,courseID) VALUES (3,3);
 INSERT INTO userCourses (userID,courseID) VALUES (4,4);

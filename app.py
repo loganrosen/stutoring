@@ -144,22 +144,25 @@ def get_catches():
 def get_matches():
     matches = []
     session['userID'] = 1
-    requested_course = g.db.execute()
 
-    session['course'] = 1
+    # session['course'] = 1
     #if you just added a course
-    if 'course' in session:
-        course_id = g.db.execute('select id from courses where code = ?', [session['course']]).fetchone()
-        matches.append(g.db.execute('select userID from userCourses where courseID = ?', [course_id]).fetchall())
+    # if 'course' in session:
+    #     course_id = g.db.execute('select id from courses where code = ?', [session['course']]).fetchone()
+    #     matches.append(g.db.execute('select userID from userCourses where courseID = ?', [course_id]).fetchall())
 
     #add all existing courses
-    '''course_ids = g.db.execute('select courseID from requests where userID = ?', [session['userID']]).fetchall()
+    course_ids = g.db.execute('select courseID from requests where userID = ?', [session['userID']]).fetchall()
+    # app.logger.debug(course_ids)
     for course_id in course_ids:
-        matches.append(g.db.execute('select userID from userCourses where courseID = ?', [course_id]).fetchall())'''
+        app.logger.debug(course_id[0])
+        matches.append(g.db.execute('select userID from userCourses where courseID = ?', [course_id[0]]).fetchall())
 
     match_obj_lst = []
-    for id in matches:
-        user_attributes_fetch = g.db.execute('select fullName, userName from users where id = ?', [id]).fetchone()
+    app.logger.debug(str(matches))
+    for id in matches[0]:
+        app.logger.debug(id)
+        user_attributes_fetch = g.db.execute('select fullName, userName from users where id = ?', [id[0]]).fetchone()
         match_obj_lst.append(Match(user_attributes_fetch[0], user_attributes_fetch[1]))
     return render_template('test_matches.html', matches=match_obj_lst)
 
