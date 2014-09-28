@@ -4,6 +4,7 @@ import sqlite3
 import re
 import hashlib
 import binascii
+import timestamp
 
 app = Flask(__name__)
 
@@ -36,7 +37,7 @@ class Catch(object):
         # self.photo = photo
         self.course = attribute_array[2]
         self.offer = attribute_array[3]
-        self.timestamp = attribute_array[4]
+        self.timestamp = datetime.datetime.fromtimestamp(int(attribute_array[4])).strftime('%Y-%m-%d %H:%M:%S')
         self.location = attribute_array[5]
         # self.description = description
 

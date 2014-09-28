@@ -4,5 +4,8 @@
 	<title>Matches</title>
 </head>
 <body>
+	{% for match in matches %}
+		<li>{{ match.full_name }} {{ match.email }}</li>
+	{% endfor %}
 </body>
 </html>
