@@ -59,7 +59,7 @@ def index():
     error = None
     full_name = None
     #handles the index form being submitted
-    if request.method == 'POST':
+    '''if request.method == 'POST':
         #handle logging in through the navbar
         if request.form['submit'] == 'nav_login':
             if login(request.form['nav_email'], request.form['nav_password']):
@@ -93,7 +93,7 @@ def index():
         else:
             return redirect(url_for('login_register'))
 
-    #display the html template
+    #display the html template'''
     return render_template('test_index.html', full_name=full_name, error=error)
 
 
@@ -164,6 +164,11 @@ def json_register():
         g.db.execute("INSERT INTO users (userName,hashedPass) VALUES (?,?)", [email, hashed_pass])
         return jsonify(result=True)
 
+@app.route('/_logout')
+def json_logout():
+    # remove the username from the session if it's there
+    return jsonify(result=True)
+
 
 '''@app.route('/loginregister', methods=['GET', 'POST'])
 def login_register():
@@ -202,12 +207,6 @@ def login_register():
     #else if there's no post information
     return render_template('test_loginregister.html', error=error)'''
 
-
-@app.route('/logout')
-def logout():
-    # remove the username from the session if it's there
-    session.pop('username', None)
-    return redirect(url_for('index'))
 
 # set the secret key.  keep this really secret:
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
