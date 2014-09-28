@@ -1,0 +1,28 @@
+body{
+	background-color: #723737;
+	text-align: left;
+}
+
+.lightened{
+	opacity: .3;
+}
+
+.lighter{
+	opacity: .6;
+}
+
+p{
+	text-align: left;
+}
+
+
+.results ul{
+	margin: 0;
+	padding: 0;
+	list-style: square;
+	text-align: left;
+}
+
+.results li{
+
+}
