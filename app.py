@@ -136,8 +136,8 @@ def login(email, password):
 #check if user exists
 @app.route('/_user_exists')
 def json_user_exists():
-    email = request.args.get('email')
-    existing_user = True if g.db.execute('select userName from users where userName = ?', email) else False
+    user_name = request.args.get('userName')
+    existing_user = True if g.db.execute('select userName from users where userName = ?', user_name) else False
     return jsonify(result=existing_user)
 
 @app.route('/_user_logged_in')
