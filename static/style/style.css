@@ -56,31 +56,38 @@ a:visited{
 	padding-left: 0;
 }
 
-input[type="text"], input[type="password"] {
-	color: white;
+input[type="text"], input[type="password"], input[type="email"], input[type="password"]{
+	size: 5em;
     background-color: transparent;
     border: none;
     border-bottom: 1px solid white;
 	font-family: 'Roboto', sans-serif;
     font-weight: 100;
-    size: 5;
 }
 
 ::-webkit-input-placeholder { 
   	color: white;
     font-weight: 100;
+    size: 5em;
+    opacity: .1;
 }
 :-moz-placeholder { 
    color: white;
    font-weight: 100;
+   size: 5em;
+   opacity: .1;
 }
 ::-moz-placeholder { 
    color: white;
    font-weight: 100;
+   size: 5em;
+   opacity: .1;
 }
 :-ms-input-placeholder {
    color: white;
    font-weight: 100;
+   size: 5em;
+   opacity: .1;
 }
 
 
@@ -117,6 +124,7 @@ input[type="submit"]:hover {
 	padding-bottom: .5em;
 	padding-left: .75em;
 	padding-right: .75em;
+	margin-bottom: .5em;
 }
 
 .verticalcenter{
@@ -137,7 +145,7 @@ input[type="submit"]:hover {
 }
 
 .homestripe.active{
-	height: 100vh;
+	height: 100%;
 }
 
 .ineed{
@@ -176,7 +184,6 @@ input[type="submit"]:hover {
 	-webkit-transform: translate3d(-50%, 0, 0);
 	text-align: left;
 	-webkit-transition: width 300ms;
-	overflow: visible;
 }
 
 .textwrapper.iwantform{
@@ -187,13 +194,13 @@ input[type="submit"]:hover {
 	width: 100%;
 }
 
-#ineedone, #ineedtwo, #ineedthree, #ineedfour, #iwantone, #iwanttwo, #iwantthree, #iwantfour{
+.ineedline, .iwantline{
 	opacity: 0;
+	display: none;
 	-webkit-transition: opacity 400ms;
-
 }
 
-#ineedone.active, #ineedtwo.active, #ineedthree.active, #ineedfour.active, #iwantone.active, #iwanttwo.active, #iwantthree.active, #iwantfour.active{
+.ineedline.active, .iwantline.active{
 	opacity: 1;
 }
 
@@ -204,4 +211,8 @@ input[type="submit"]:hover {
 
 .userexists,.usernoexist,.wantuserexists,.wantusernoexist{
 	display: none;
+}
+
+.lightheader{
+	opacity: .1;
 }

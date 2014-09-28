@@ -21,11 +21,18 @@
 					$('#needsubmit1').hide();
 					if (data.result == true)
 					{
-						$('.userexists').show();
+						$(".userexists").each(function(i){
+				   			$(this).delay((i++)*timeDelay).fadeTo(300, 1);
+				   		});
 					} else {
-						$('.usernoexist').show();
+						$(".usernoexist").each(function(i){
+				   			$(this).delay((i++)*timeDelay).fadeTo(300, 1);
+				   		});
 					}
 				});
+				// $(".ineedline2").each(function(i){
+		  //  			$(this).delay((i++)*timeDelay).fadeTo(300, 1);
+		  //  		});
 				return false;
 			});
 
@@ -37,9 +44,13 @@
 					$('#wantsubmit1').hide();
 					if (data.result == true)
 					{
-						$('.wantuserexists').show();
+						$(".wantuserexists").each(function(i){
+				   			$(this).delay((i++)*timeDelay).fadeTo(300, 1);
+				   		});
 					} else {
-						$('.wantusernoexist').show();
+						$(".wantusernoexist").each(function(i){
+				   			$(this).delay((i++)*timeDelay).fadeTo(300, 1);
+				   		});
 					}
 				});
 				return false;
@@ -59,7 +70,7 @@
 		<div class="columns large-12 small-12">
 		<form id="logout">
 			<ul>
-				<li> sTudoring </li>
+				<li> <a href="index.html"> sTudoring </a></li>
 				<li> <input type="submit" name="submit">logout</input> </li>
 				<li> Logged in as: {{full_name}}</li>
 			</ul>
@@ -72,7 +83,7 @@
 		<div class="columns large-12 small-12">
 		<form id="login">
 			<ul>
-				<li> sTudoring </li>
+				<li> <a href="index.html"> sTudoring </a> </li>
 				<li> <input type="submit" name="submit" value="nav_login"> </input> </li>
 				<li> password: <input type="password" name="nav_password"> </input> </li>
 				<li> email: <input type="text" name="nav_email"> </input> </li>
@@ -87,23 +98,24 @@
 		<div class="columns large-12 small-12">
 		<div class="bigform ineedform textwrapper"> 
 			<form>
-				<p> <span id="ineed"> I need help </span> <span id="ineedone">with <input type="text" name="course" placeholder="XXXX ####">. </span> </p>
-				<p> <span id="ineedtwo">I am located at <input type="text" name="locations" placeholder="location">.</span> </p>
-				<p> <span id="ineedthree"> I am willing to pay <input type="text" name="offer" placeholder="$$$">.</span> </p>
-				<p> My Cornell email is <input type="email" name="email" id="needemail" placeholder="nec45@cornell.edu"> </p>
-				<p> <input type="submit" name="needsubmit1" id="needsubmit1" value="get_help"> </p>
+				<p> <span id="ineed"> I need help </span> <span class="ineedline">with <input type="text" name="course" placeholder="XXXX ####">. </span> </p>
+				<p> <span class="ineedline" id="ineed">I am located at <input type="text" name="locations" placeholder="location">.</span> </p>
+				<p> <span class="ineedline"> I am willing to pay <input type="text" name="offer" placeholder="$$$">.</span> </p>
+				<p> <span class="ineedline"> My email is <input type="email" name="email" id="needemail" placeholder="nec45@cornell.edu"> </span> </p>
+				<p> <input type="submit" name="needsubmit1" id="needsubmit1" class="ineedline" value="get_help"> </p>
 
 				<!-- shown if account exists -->
-				<p class="userexists">My password is <input type="password" name="password" placeholder="secretpassword">.</p>
-
-				<p class="userexists"><input type="submit" name="userexistssubmit" class="userexists" id="userexistssubmit" value="Submit"></p>
+				<p class="userexists"> <span class="ineedline2 lightheader"> Welcome back!</span></p>
+				<p class="userexists"> <span class="ineedline2"> password: <input type="text" name="password" placeholder="secretpassword">. </span></p>
+				<p class="userexists"> <span class="ineedline2"> <input type="submit" name="userexistssubmit" class="userexists ineedline"id="userexistssubmit" value="Submit"> </span> </p>
 
 				<!-- shown if account doesn't exist -->
-				<p class="usernoexist">I want my password to be <input type="password" name="password1" placeholder="secretpassword">.</p>
-				<p class="usernoexist">Again, I want my password to be <input type="password" name="password2" placeholder="secretpassword">.</p>
-				<p class="usernoexist">My name is <input type="name" name="fullname" placeholder="Nicole Calace">.</p>
+				<p class="usernoexist"> <span class="ineedline2 lightheader"> Looks like you're new here... </span></p>
+				<p class="usernoexist"> <span class="ineedline2"> My Name is <input type="name" name="fullname" placeholder="Bob Rob">. </span> </p>
+				<p class="usernoexist"> <span class="ineedline2"> My password will be <input type="password" name="password1" placeholder="secretpassword">.</span></p>
+				
 
-				<p class="usernoexist"><input type="submit" name="usernoexistsubmit" id="usernoexistsubmit" class="usernoexist" value="Submit"></p>
+				<p class="usernoexist"> <span class="ineedline2"> <input type="submit" name="usernoexistsubmit" id="usernoexistsubmit" class="usernoexist ineedline" value="Submit"> </span> </p>
 
 			</form>
 		</div>
@@ -118,21 +130,24 @@
 		<div class="columns large-12 small-12">
 		<div class="bigform iwantform textwrapper"> 
 			<form method="POST">
-				<p> <span id="iwant">I want to tutor </span> <span id="iwantone">for <input type="text" name="expert_courses" placeholder="XXXX ####">. </span> </p>
-				<p> <span id="iwanttwo"> I am located at <input type="text" name="location" placeholder="location">.</span> </p>
-				<p> <span id="iwantthree"> I am willing to get paid <input type="text" name="howmuch" placeholder="$$$">. </span> </p>
-				<p>My Cornell email is <input type="email" name="wantemail" id="wantemail" placeholder="nec45@cornell.edu">
-				<p> <input type="submit" name="wantsubmit1" id="wantsubmit1" value="Submit"> </p>
+				<p> <span id="iwant">I want to tutor </span> <span class="iwantline">for <input type="text" name="expert_courses" placeholder="INFO 2300">. </span> </p>
+				<p> <span class="iwantline"> I am located at <input type="text" name="location" placeholder="Olin Library">.</span> </p>
+				<p> <span class="iwantline"> I am willing to get paid <input type="text" name="howmuch" placeholder="$$$">. </span> </p>
+				<p> <span class="iwantline"> My Cornell email is <input type="email" name="wantemail" id="wantemail" placeholder="br9000@cornell.edu">. </span> </p>
+				<p> <input type="submit" name="wantsubmit1" id="wantsubmit1" value="Submit" class="iwantline"> </p>
+
 				<!-- shown if account exists -->
-				<p class="wantuserexists">My password is <input type="password" name="password" placeholder="secretpassword">.</p>
-				<p class="wantuserexists"><input type="submit" name="wantuserexistssubmit" class="wantuserexists" id="wantuserexistssubmit" value="Submit"></p>
+				<p class="wantuserexists"> <span class="iwantline2 lightheader"> Welcome back! </span></p>
+				<p class="wantuserexists"> <span class="iwantline2"> My password is <input type="password" name="password" placeholder="secretpassword">. </span> </p>
+				<p class="wantuserexists"> <span class="iwantline2"> <input type="submit" name="wantuserexistssubmit" class="wantuserexists iwantline" id="wantuserexistssubmit" value="Submit"></p>
 
 				<!-- shown if account doesn't exist -->
-				<p class="wantusernoexist">I want my password to be <input type="password" name="password1" placeholder="secretpassword">.</p>
-				<p class="wantusernoexist">Again, I want my password to be <input type="password" name="password2" placeholder="secretpassword">.</p>
-				<p class="wantusernoexist">My name is <input type="name" name="fullname" placeholder="Nicole Calance">.</p>
+				<p class="wantusernoexist"> <span class="iwantline2 lightheader"> Looks like you're new here... </span></p>
+				<p class="wantusernoexist"> <span class="iwantline2"> My name is <input type="text" name="fullname" placeholder="Bob Rob">. </span> </p>
+				<p class="wantusernoexist"> <span class="iwantline2"> My password will be <input type="password" name="password1" placeholder="secretpassword">. </span> </p>
+				
 
-				<p class="wantusernoexist"><input type="submit" name="wantusernoexistsubmit" id="wantusernoexistsubmit" class="wantusernoexist" value="Submit"></p>
+				<p class="wantusernoexist"><input type="submit" name="wantusernoexistsubmit" id="wantusernoexistsubmit" class="wantusernoexist iwantline" value="Submit"></p>
 
 
 			</form>
@@ -146,67 +161,28 @@
 
 <script>
 
-	var timeDelay = 400;
+	var timeDelay = 800;
 
 	jQuery(document).ready(function() {
 
 	   	$( "#ineed" ).click(function() {
 	   		$(".ineed").addClass("active");
 	   		$(".ineedform").addClass("active");
-
-	  	 	$("#ineedone").delay(timeDelay).queue(function(next){
-			    $(this).addClass("active");
-			    next();
-			});
-
-			$("#ineedtwo").delay(timeDelay*2).queue(function(next){
-			    $(this).addClass("active");
-			    next(); 
-			});
-
-			$("#ineedthree").delay(timeDelay*3).queue(function(next){
-			    $(this).addClass("active");
-			    next();
-			});
-
-			$("#ineedfour").delay(timeDelay*4).queue(function(next){
-			    $(this).addClass("active");
-			    next();
-			});
-
-			$("#ineedbutton").delay(timeDelay*5).queue(function(next){
-			    $(this).addClass("active");
-			    next();
-			});
-
-			$(".iwantform").hide();
+	   		$(".ineedline").each(function(i){
+	   			$(this).delay((i++)*timeDelay).fadeTo(500, 1);
+	   		});
+			$(".iwant").hide();
+			$('body').css('background-color', '#723737');
 		});
 
 		$( "#iwant" ).click(function() {
 	   		$(".iwant").addClass("active");
 	   		$(".iwantform").addClass("active");
-
-	  	 	$("#iwantone").delay(timeDelay).queue(function(next){
-			    $(this).addClass("active");
-			    next();
-			});
-
-			$("#iwanttwo").delay(timeDelay*2).queue(function(next){
-			    $(this).addClass("active");
-			    next(); 
-			});
-
-			$("#iwantthree").delay(timeDelay*3).queue(function(next){
-			    $(this).addClass("active");
-			    next();
-			});
-
-			$("#iwantfour").delay(timeDelay*4).queue(function(next){
-			    $(this).addClass("active");
-			    next();
-			});
-
-			$(".ineedform").hide();
+	   		$(".iwantline").each(function(i){
+	   			$(this).delay((i++)*timeDelay).fadeTo(300, 1);
+	   		});
+			$(".ineed").hide();
+			$('body').css('background-color', '#542c2c');
 		});
 
 	});
