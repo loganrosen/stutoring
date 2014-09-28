@@ -7,29 +7,34 @@
 	<link rel="stylesheet" type="text/css" href="../static/style/foundation.min.css" />
 	<link rel="stylesheet" type="text/css" href="../static/style/style.css">
 	<link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
+	<link href="http://fonts.googleapis.com/css?family=Arvo" rel="stylesheet" type="text/css">
 	<script type=text/javascript>
 	  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
 	</script>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
+			var notReadyYet = true;
 			$('#needsubmit1').click(function() {
-				$.getJSON($SCRIPT_ROOT + '/_user_exists', {
-					userName: $('#needemail').val()
-				}, function(data) {
-					console.log(data.result)
-					$('#needsubmit1').hide();
-					if (data.result == true)
-					{
-						$(".userexists").each(function(i){
-				   			$(this).delay((i++)*timeDelay).fadeTo(300, 1);
-				   		});
-					} else {
-						$(".usernoexist").each(function(i){
-				   			$(this).delay((i++)*timeDelay).fadeTo(300, 1);
-				   		});
-					}
-				});
+				
+					$.getJSON($SCRIPT_ROOT + '/_user_exists', {
+						userName: $('#needemail').val()
+					}, function(data) {
+						$('#needsubmit1').hide();
+						var pointerState = $("#ineed").css("cursor");
+						if (data.result == true && pointerState == "auto")
+						{
+							$(".userexists").each(function(i){
+					   			$(this).delay((i++)*timeDelay).fadeTo(300, 1);
+					   		});
+						} else if (pointerState == "auto") {
+							$(".usernoexist").each(function(i){
+					   			$(this).delay((i++)*timeDelay).fadeTo(300, 1);
+					   		});
+						}
+					
+					});
+				
 				// $(".ineedline2").each(function(i){
 		  //  			$(this).delay((i++)*timeDelay).fadeTo(300, 1);
 		  //  		});
@@ -37,22 +42,27 @@
 			});
 
 			$('#wantsubmit1').click(function() {
-				$.getJSON($SCRIPT_ROOT + '/_user_exists', {
-					userName: $('#wantemail').val()
-				}, function(data) {
-					console.log(data.result)
-					$('#wantsubmit1').hide();
-					if (data.result == true)
-					{
-						$(".wantuserexists").each(function(i){
-				   			$(this).delay((i++)*timeDelay).fadeTo(300, 1);
-				   		});
-					} else {
-						$(".wantusernoexist").each(function(i){
-				   			$(this).delay((i++)*timeDelay).fadeTo(300, 1);
-				   		});
-					}
-				});
+				
+					$.getJSON($SCRIPT_ROOT + '/_user_exists', {
+						userName: $('#wantemail').val()
+					}, function(data) {
+						// console.log(data.result)
+						$('#wantsubmit1').hide();
+						var pointerState = $("#iwant").css("cursor");
+						// console.log(notReadyYet);
+						if (data.result == true && pointerState == "auto")
+						{
+							$(".wantuserexists").each(function(i){
+					   			$(this).delay((i++)*timeDelay).fadeTo(300, 1);
+					   		});
+						} else if (pointerState == "auto") {
+							$(".wantusernoexist").each(function(i){
+					   			$(this).delay((i++)*timeDelay).fadeTo(300, 1);
+					   		});
+						}
+					
+					});
+				
 				return false;
 			});
 		});
@@ -158,12 +168,14 @@
 
 	jQuery(document).ready(function() {
 
-	   	$( "#ineed" ).click(function() {
+	   	$( ".ineed" ).click(function() {
+	   		notReadyYet = false;
 	   		$(".ineedform").addClass("active");
 	   		$(".ineed").addClass("active");
 	   		$("#ineed").addClass("active");
 	   		// $("#ineed").css("top","10px");
 	   		$("#ineed").css("position","static");
+	   		$("#ineed").css("cursor","auto");
 	   		// $("#ineed").css("top","");
 	   		$(".ineedline").each(function(i){
 	   			$(this).delay((i++)*timeDelay).fadeTo(500, 1);
@@ -172,10 +184,13 @@
 			$('body').css('background-color', '#723737');
 		});
 
-		$( "#iwant" ).click(function() {
+		$( ".iwant" ).click(function() {
+			notReadyYet = false;
+			$('input[type=button]').prop('disabled',false);
 			$(".iwant").addClass("active");
 	   		$(".iwantform").addClass("active");
 			$("#iwant").css("position","static");
+			$("#iwant").css("cursor","auto");
 
 	   		$(".iwantline").each(function(i){
 	   			$(this).delay((i++)*timeDelay).fadeTo(300, 1);

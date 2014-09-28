@@ -28,7 +28,7 @@ a:visited{
 
 .navbar{
 	color: white;
-	background-color: #804b4b;
+	background-color: #291313;
 	position: fixed;
 	width: 100%;
 	padding-top: 1em;
@@ -101,7 +101,7 @@ input[type="submit"] {
     font-weight: 100;
     text-transform: lowercase;
     font-size: 1em;
-    cursor: pointer; 
+    /*cursor: pointer; */
     display: inline;
 }
 
@@ -153,7 +153,6 @@ input[type="submit"]:hover {
 	-webkit-transition: all 0.3s ease;
 	-o-transition: all 0.3s ease;
 	-moz-transition: all 0.3s ease;
-
 }
 
 .homestripe.active{
@@ -161,21 +160,23 @@ input[type="submit"]:hover {
 }
 
 .ineed{
-	background-color: #723737;
+	background-color: #411C1C;
 }
 
 #ineed{
 	top: 25vh;
 	position: absolute;
+	cursor: pointer;
 }
 
 .iwant{
-	background-color: #542c2c;
+	background-color: #4C2020;
 }
 
 #iwant{
 	top: 20vh;
 	position: absolute;
+	cursor: pointer;
 }
 
 .bigform{
@@ -255,5 +256,6 @@ li
 
 #pagetitle
 {
+	font-family: "Arvo", serif;
 	padding: 0;
 }
